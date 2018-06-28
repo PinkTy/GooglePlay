@@ -14,6 +14,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     public static int HEIGHT;
     private MainThread thread;
     private Background bg;
+    private SpaceShip spaceShip;
     //asdhuas
 
     public GamePanel(Context context)
@@ -51,9 +52,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceCreated(SurfaceHolder holder){
 
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background));
-        bg.setVector(-5);
+
+        bg.setVector(5);
         WIDTH = bg.image.getWidth();
         HEIGHT = bg.image.getHeight();
+        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(),R.drawable.spaceship),30, 38,1);
         //we can safely start the game loop
         thread.setRunning(true);
         thread.start();
@@ -62,12 +65,72 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+        float x = event.getX();
+        float y = event.getY();
+        if(event.getAction() == MotionEvent.ACTION_DOWN){
+            System.out.print("x:");System.out.print(x);
+            System.out.print("  X:");System.out.println(spaceShip.getX());
+            System.out.print("y:");System.out.print(y);
+            System.out.print("  Y:");System.out.println(spaceShip.getY());
+            if(x > spaceShip.getX()-400){
+                spaceShip.setRight(true);
+                System.out.println("Go Right");
+            }
+            if(x < spaceShip.getX()-400){
+                spaceShip.setLeft(true);
+                System.out.println("Go Left");
+            }
+            if(y < spaceShip.getY()){
+                spaceShip.setUp(true);
+                System.out.println("Go Up");
+            }
+            if(y > spaceShip.getY()){
+                spaceShip.setDown(true);
+                System.out.println("Go Down");
+            }
+
+            return true;
+            }
+        if(event.getAction() == MotionEvent.ACTION_MOVE){
+            System.out.print("x:");System.out.print(x);
+            System.out.print("  X:");System.out.println(spaceShip.getX());
+            System.out.print("y:");System.out.print(y);
+            System.out.print("  Y:");System.out.println(spaceShip.getY());
+            if(x > spaceShip.getX()-400){
+                spaceShip.setRight(true);
+                System.out.println("Go Right");
+            }
+            if(x < spaceShip.getX()-400){
+                spaceShip.setLeft(true);
+                System.out.println("Go Left");
+            }
+            if(y < spaceShip.getY()){
+                spaceShip.setUp(true);
+                System.out.println("Go Up");
+            }
+            if(y > spaceShip.getY()){
+                spaceShip.setDown(true);
+                System.out.println("Go Down");
+            }
+
+            return true;
+        }
+
+
+        if(event.getAction() == MotionEvent.ACTION_UP){
+            spaceShip.setUp(false);
+            spaceShip.setDown(false);
+            spaceShip.setLeft(false);
+            spaceShip.setRight(false);
+            return  true;
+        }
         return super.onTouchEvent(event);
     }
 
+
     public void update()
     {
-
+        spaceShip.update();
         bg.update();
     }
     @Override
@@ -88,6 +151,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             //System.out.println(savedState);
             canvas.scale(scaleFactorX, scaleFactorY);
             bg.draw(canvas);
+            spaceShip.draw(canvas);
             canvas.restoreToCount(savedState);
         }
     }
