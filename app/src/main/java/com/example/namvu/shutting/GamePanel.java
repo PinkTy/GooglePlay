@@ -56,7 +56,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         bg.setVector(5);
         WIDTH = bg.image.getWidth();
         HEIGHT = bg.image.getHeight();
-        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(),R.drawable.spaceship),30, 38,1);
+        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(),R.drawable.spaceship));
         //we can safely start the game loop
         thread.setRunning(true);
         thread.start();
@@ -69,22 +69,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         float y = event.getY();
         if(event.getAction() == MotionEvent.ACTION_DOWN){
             System.out.print("x:");System.out.print(x);
-            System.out.print("  X:");System.out.println(spaceShip.getX());
+            System.out.print("  X:");System.out.println(spaceShip.getCentralImageX());
             System.out.print("y:");System.out.print(y);
-            System.out.print("  Y:");System.out.println(spaceShip.getY());
-            if(x > spaceShip.getX()-400){
+            System.out.print("  Y:");System.out.println(spaceShip.getCentralImageY());
+            if(x > spaceShip.getCentralImageX()){
                 spaceShip.setRight(true);
                 System.out.println("Go Right");
             }
-            if(x < spaceShip.getX()-400){
+            if(x < spaceShip.getCentralImageX()){
                 spaceShip.setLeft(true);
                 System.out.println("Go Left");
             }
-            if(y < spaceShip.getY()){
+            if(y < spaceShip.getCentralImageY()){
                 spaceShip.setUp(true);
                 System.out.println("Go Up");
             }
-            if(y > spaceShip.getY()){
+            if(y > spaceShip.getCentralImageY()){
                 spaceShip.setDown(true);
                 System.out.println("Go Down");
             }
@@ -93,22 +93,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             }
         if(event.getAction() == MotionEvent.ACTION_MOVE){
             System.out.print("x:");System.out.print(x);
-            System.out.print("  X:");System.out.println(spaceShip.getX());
+            System.out.print("  X:");System.out.println(spaceShip.getCentralImageX());
             System.out.print("y:");System.out.print(y);
-            System.out.print("  Y:");System.out.println(spaceShip.getY());
-            if(x > spaceShip.getX()-400){
+            System.out.print("  Y:");System.out.println(spaceShip.getCentralImageY());
+            if(x > spaceShip.getCentralImageX()){
                 spaceShip.setRight(true);
                 System.out.println("Go Right");
             }
-            if(x < spaceShip.getX()-400){
+            if(x < spaceShip.getCentralImageX()){
                 spaceShip.setLeft(true);
                 System.out.println("Go Left");
             }
-            if(y < spaceShip.getY()){
+            if(y < spaceShip.getCentralImageY()){
                 spaceShip.setUp(true);
                 System.out.println("Go Up");
             }
-            if(y > spaceShip.getY()){
+            if(y > spaceShip.getCentralImageX()){
                 spaceShip.setDown(true);
                 System.out.println("Go Down");
             }

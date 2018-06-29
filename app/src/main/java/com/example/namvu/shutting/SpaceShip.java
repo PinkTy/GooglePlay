@@ -15,17 +15,20 @@ public class SpaceShip extends GameObject {
     private boolean playing;
 //    private Animation animation = new Animation();
     private long startTime;
-    public SpaceShip(Bitmap res, int w, int h, int numFrames){
+    public SpaceShip(Bitmap res){
         //System.out.println(GamePanel.WIDTH);
-        x = GamePanel.WIDTH/2-w/2;
-        y = GamePanel.HEIGHT-2*h ;
+
         dy = 0;
         dx = 0;
 //        score = 0;
-        height = h;
-        width = w;
-        spritessheet = res;
 
+        spritessheet = res;
+        height = res.getHeight();
+        width = res.getWidth();
+        System.out.print("height: "+ height);
+        System.out.print(" width: "+ width);
+        x = GamePanel.WIDTH/2;
+        y = GamePanel.HEIGHT-height;
 //        Bitmap[] image = new Bitmap[numFrames];
 //        for(int i = 0; i < image.length; i++){
 //            image[i] = Bitmap.createBitmap( spritessheet,i *width, 0, width, height);
@@ -72,19 +75,22 @@ public class SpaceShip extends GameObject {
 
     public void update(){
         if(up){
-            y-=10;
+            dy-=20;
 
         }
         if(down){
-            y+=10;
+            dy+=20;
         }
         if(right){
-            x+=10;
+            dx+=20;
 
         }
         if(left){
-            x-=10;
+            dx-=20;
         }
+        x += dx;
+        y += dy;
+        dy = 0; dx = 0;
 
     }
 
