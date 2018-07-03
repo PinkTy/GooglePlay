@@ -6,14 +6,14 @@ import android.view.animation.Animation;
 
 public class SpaceShip extends GameObject {
     private Bitmap spritessheet;
-//    private int score;
-//    private double dya;
+    //    private int score;
+    //    private double dya;
     private boolean up;
     private boolean down;
     private boolean left;
     private boolean right;
     private boolean playing;
-//    private Animation animation = new Animation();
+    //    private Animation animation = new Animation();
     private long startTime;
     public SpaceShip(Bitmap res){
         //System.out.println(GamePanel.WIDTH);

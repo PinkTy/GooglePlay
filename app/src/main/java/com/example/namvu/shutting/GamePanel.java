@@ -90,7 +90,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             }
 
             return true;
-            }
+        }
         if(event.getAction() == MotionEvent.ACTION_MOVE){
             System.out.print("x:");System.out.print(x);
             System.out.print("  X:");System.out.println(spaceShip.getCentralImageX());
