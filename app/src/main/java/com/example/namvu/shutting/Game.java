@@ -7,7 +7,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class Game extends Activity {
-
+    //commit test
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
