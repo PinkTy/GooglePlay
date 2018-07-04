@@ -3,12 +3,12 @@ package com.example.namvu.shutting;
 import android.graphics.Rect;
 
 public abstract class GameObject {
-    protected int x;
-    protected int y;
-    protected int dx;
-    protected int dy;
-    protected int width;
-    protected int height;
+    public int x;
+    public int y;
+    public int dx;
+    public int dy;
+    public int width;
+    public int height;
 
     public void setX(int x){
         this.x = x;

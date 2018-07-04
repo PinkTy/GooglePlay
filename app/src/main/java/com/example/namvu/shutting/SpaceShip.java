@@ -2,6 +2,9 @@ package com.example.namvu.shutting;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.animation.Animation;
 
 public class SpaceShip extends GameObject {
@@ -13,6 +16,7 @@ public class SpaceShip extends GameObject {
     private boolean left;
     private boolean right;
     private boolean playing;
+    public Rect rect ;
     //    private Animation animation = new Animation();
     private long startTime;
     public SpaceShip(Bitmap res){
@@ -37,11 +41,17 @@ public class SpaceShip extends GameObject {
 //        animation.setDelay(10);
 //        animation.setFrames(image);
         startTime = System.nanoTime();
+        rect = getRectangle();
+
 
     }
     public  void draw(Canvas canvas){
 //        System.out.print(x);
 //        System.out.print(y);
+        Paint fillPaint = new Paint();
+        fillPaint.setColor(Color.RED);
+        canvas.drawRect(rect, fillPaint);
+
         canvas.drawBitmap(spritessheet, x,y, null);
     }
     public boolean getPlaying(){return playing;}
@@ -74,6 +84,7 @@ public class SpaceShip extends GameObject {
     }
 
     public void update(){
+
         if(up){
             dy-=20;
 
@@ -91,6 +102,7 @@ public class SpaceShip extends GameObject {
         x += dx;
         y += dy;
         dy = 0; dx = 0;
+        rect = getRectangle();
 
     }
 
