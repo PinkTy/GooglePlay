@@ -1,6 +1,7 @@
 package com.example.namvu.shutting;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -82,6 +83,7 @@ public class SpaceShip extends GameObject {
     public void setRight(boolean right) {
         this.right = right;
     }
+
 
     public void update(){
 
