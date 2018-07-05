@@ -30,22 +30,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private SpaceShip spaceShip;
     public static ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 
-    //asdhuas
-
     public GamePanel(Context context)
     {
         super(context);
-
-
         //add the callback to the surfaceholder to intercept events
         getHolder().addCallback(this);
-
         thread = new MainThread(getHolder(), this);
-
         //make gamePanel focusable so it can handle events
         setFocusable(true);
     }
-
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){}
 
@@ -62,7 +55,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
 
     }
-
     public Rect getRectangle(int x, int y, int width, int height){
         return new Rect(x,y, x+width, y+height);
     }
@@ -71,25 +63,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     }
     @Override
     public void surfaceCreated(SurfaceHolder holder){
-
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background));
-
         bg.setVector(5);
         WIDTH = bg.image.getWidth();
         HEIGHT = bg.image.getHeight();
         screenHEIGHT = getHeight();
         screenWIDTH = getWidth();
         spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(),R.drawable.spaceship));
+        System.out.println(spaceShip.getX());
         bulletStartTime = System.nanoTime();
-
-
-        //we can safely start the game loop
         thread.setRunning(true);
         thread.start();
 
     }
-
-
     public void update()
     {
         spaceShip.update();
@@ -100,19 +86,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             bulletStartTime = System.nanoTime();
         }
         for(int i = 0; i < bullets.size(); i++){
-//            if(bullets.get(i).y<-100 ){
-//                bullets.remove(i);
-//                break;
-//            }
             bullets.get(i).update();
-//            if(collision(missiles.get(i), player)){
-//                missiles.remove(i);
-//                player.setPlaying(false);
-//                break;
-//
-//            }
-
-
         }
     }
     @Override
@@ -124,37 +98,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             shoot(true);
             int x = (int)(event.getRawX()/copyscaleFactorX);
             int y = (int)(event.getRawY()/copyscaleFactorY);
-            System.out.print("x:");System.out.print(x);
-            System.out.print("  X:");System.out.println(spaceShip.x);
-            System.out.print("y:");System.out.print(y);
-            System.out.print("  Y:");System.out.println(spaceShip.y);
-
             if(spaceShip.rect.contains(x,y)){
                 spaceShip.moving(true);
         }
             return true;
         }
         if(event.getAction() == MotionEvent.ACTION_MOVE){
-
             int x = (int)(event.getRawX()/copyscaleFactorX);
             int y = (int)(event.getRawY()/copyscaleFactorY);
-
-
             rect = getRectangle(spaceShip.x, spaceShip.y,spaceShip.width, spaceShip.height);
-            System.out.print("x:");System.out.print(x);
-            System.out.print("  X:");System.out.println(spaceShip.x);
-            System.out.print("y:");System.out.print(y);
-            System.out.print("  Y:");System.out.println(spaceShip.y);
             spaceShip.setXY(x,y);
-//
             return true;
         }
-//        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-//            case MotionEvent.ACTION_DOWN:
-//        }
-
-
-
         if(event.getAction() == MotionEvent.ACTION_UP){
             shoot(false);
             spaceShip.moving(false);
@@ -162,43 +117,23 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
         return super.onTouchEvent(event);
     }
-
-
     @Override
     public void draw(Canvas canvas)
-    {
-        super.draw(canvas);
+    { super.draw(canvas);
         final float scaleFactorX = getWidth()/(WIDTH*1.f);
         final float scaleFactorY = getHeight()/(HEIGHT*1.f);
         copyscaleFactorY = scaleFactorY;
         copyscaleFactorX = scaleFactorX;
-//        System.out.println(getWidth());
-//        System.out.println(getHeight());
-//        System.out.println(scaleFactorX);
-//        System.out.println(scaleFactorY);
-
         if(canvas!=null) {
             final int savedState = canvas.save();
-
-
             canvas.scale(scaleFactorX, scaleFactorY);
             bg.draw(canvas);
             spaceShip.draw(canvas);
-//            Paint fillPaint = new Paint();
-//            fillPaint.setColor(Color.RED);
-//            canvas.drawRect(rect, fillPaint);
             for(Bullet m:bullets){
                 m.draw(canvas);
             }
-
-
-
             canvas.restoreToCount(savedState);
             copySavestate = savedState;
         }
     }
-
-
-
-
 }
