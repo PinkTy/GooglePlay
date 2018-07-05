@@ -38,8 +38,8 @@ public class SpaceShip extends GameObject {
         width = res.getWidth();
         System.out.print("height: "+ height);
         System.out.print(" width: "+ width);
-        x = GamePanel.screenWIDTH/2;
-        y = GamePanel.screenHEIGHT-2*height;
+        x = GamePanel.WIDTH/2;
+        y = GamePanel.HEIGHT-height;
         spritessheet = res;
 
 //        Bitmap[] image = new Bitmap[numFrames];
