@@ -38,8 +38,8 @@ public class SpaceShip extends GameObject {
         width = res.getWidth();
         System.out.print("height: "+ height);
         System.out.print(" width: "+ width);
-        x = GamePanel.WIDTH/2;
-        y = GamePanel.HEIGHT - height;
+        x = GamePanel.screenWIDTH/2;
+        y = GamePanel.screenHEIGHT-2*height;
         spritessheet = res;
 
 //        Bitmap[] image = new Bitmap[numFrames];
@@ -64,7 +64,6 @@ public class SpaceShip extends GameObject {
         Paint fillPaint = new Paint();
         fillPaint.setColor(Color.RED);
         canvas.drawRect(rect, fillPaint);
-
         canvas.drawBitmap(spritessheet, x,y, null);
     }
     public boolean getPlaying(){return playing;}
@@ -90,18 +89,8 @@ public class SpaceShip extends GameObject {
     public void update(){
 
         if(move){
-//            if(rect.right > GamePanel.WIDTH){
-//                x = (GamePanel.WIDTH-width-5);
-//            }
-//            else if(rect.top < 0){
-//                x = 1 ;
-//            }
-//            else {
             x = X;
-//            }
-
             y = Y;
-
         }
         rect = getRectangle();
         rectFortouch = getRectangleTouch();
