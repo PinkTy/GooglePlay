@@ -95,6 +95,7 @@ public class SpaceShip extends GameObject {
         rect = getRectangle();
         rectFortouch = getRectangleTouch();
 
+
     }
 
 }
