@@ -8,7 +8,9 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.animation.Animation;
 
+
 public class SpaceShip extends GameObject {
+
     private Bitmap spritessheet;
     //    private int score;
     //    private double dya;
@@ -21,6 +23,7 @@ public class SpaceShip extends GameObject {
     private boolean right;
     private boolean playing;
     public Rect rect ;
+    public Rect rectFortouch;
     //    private Animation animation = new Animation();
     private long startTime;
     public SpaceShip(Bitmap res){
@@ -35,8 +38,8 @@ public class SpaceShip extends GameObject {
         width = res.getWidth();
         System.out.print("height: "+ height);
         System.out.print(" width: "+ width);
-        x = GamePanel.screenWIDTH/2;
-        y = GamePanel.screenHEIGHT-2*height;
+        x = GamePanel.WIDTH/2;
+        y = GamePanel.HEIGHT - height;
         spritessheet = res;
 
 //        Bitmap[] image = new Bitmap[numFrames];
@@ -48,18 +51,26 @@ public class SpaceShip extends GameObject {
 //        animation.setFrames(image);
         startTime = System.nanoTime();
         rect = getRectangle();
+        rectFortouch = getRectangleTouch();
 
 
     }
     public  void draw(Canvas canvas){
 //        System.out.print(x);
 //        System.out.print(y);
+//        Paint fillPaint1 = new Paint();
+//        fillPaint1.setColor(Color.YELLOW);
+//        canvas.drawRect(rectFortouch, fillPaint1);
         Paint fillPaint = new Paint();
         fillPaint.setColor(Color.RED);
         canvas.drawRect(rect, fillPaint);
+
         canvas.drawBitmap(spritessheet, x,y, null);
     }
     public boolean getPlaying(){return playing;}
+    public Rect getRectangleTouch(){
+        return new Rect(x-80,y-50, x+width*2, y+height*2);
+    }
 
 
     public void setPlaying(boolean playing) {
@@ -79,10 +90,21 @@ public class SpaceShip extends GameObject {
     public void update(){
 
         if(move){
+//            if(rect.right > GamePanel.WIDTH){
+//                x = (GamePanel.WIDTH-width-5);
+//            }
+//            else if(rect.top < 0){
+//                x = 1 ;
+//            }
+//            else {
             x = X;
+//            }
+
             y = Y;
+
         }
         rect = getRectangle();
+        rectFortouch = getRectangleTouch();
 
     }
 

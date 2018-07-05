@@ -16,8 +16,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 {
     public Rect rect;
     public static int copySavestate;
-    public float copyscaleFactorX;
-    public float copyscaleFactorY;
+    public static float copyscaleFactorX;
+    public static float copyscaleFactorY;
     public static int screenWIDTH;
     public static int screenHEIGHT;
     public static int WIDTH;
@@ -26,7 +26,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private MainThread thread;
     private Background bg;
     private long bulletStartTime;
-    public long timeDelayShoot = 0;
+    public long timeDelayShoot = 200;
     private SpaceShip spaceShip;
     public static ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 
@@ -77,8 +77,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         bg.setVector(5);
         WIDTH = bg.image.getWidth();
         HEIGHT = bg.image.getHeight();
-        screenHEIGHT = getHeight();
-        screenWIDTH = getWidth();
+        copyscaleFactorY = getHeight()/(HEIGHT*1.f);
+        copyscaleFactorX = getWidth()/(WIDTH*1.f);
         spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(),R.drawable.spaceship));
         bulletStartTime = System.nanoTime();
 
@@ -120,27 +120,35 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     {
 
         if(event.getAction() == MotionEvent.ACTION_DOWN){
-            rect = getRectangle(spaceShip.x, spaceShip.y,spaceShip.width, spaceShip.height);
+//            rect = getRectangle(spaceShip.x, spaceShip.y,spaceShip.width, spaceShip.height);
             shoot(true);
-            int x = (int)(event.getRawX()/copyscaleFactorX);
-            int y = (int)(event.getRawY()/copyscaleFactorY);
-            System.out.print("x:");System.out.print(x);
-            System.out.print("  X:");System.out.println(spaceShip.x);
-            System.out.print("y:");System.out.print(y);
-            System.out.print("  Y:");System.out.println(spaceShip.y);
+//            int x = (int)(event.getRawX()/copyscaleFactorX);
+//            int y = (int)(event.getRawY()/copyscaleFactorY);
+//            System.out.print("x:");System.out.print(x);
+//            System.out.print("  X:");System.out.println(spaceShip.x);
+//            System.out.print("y:");System.out.print(y);
+//            System.out.print("  Y:");System.out.println(spaceShip.y);
 
-            if(spaceShip.rect.contains(x,y)){
-                spaceShip.moving(true);
-        }
+//            if(spaceShip.rect.contains(x,y)){
+//                spaceShip.moving(true);
+//        }
             return true;
         }
         if(event.getAction() == MotionEvent.ACTION_MOVE){
 
             int x = (int)(event.getRawX()/copyscaleFactorX);
+
             int y = (int)(event.getRawY()/copyscaleFactorY);
+            if(x+spaceShip.width > WIDTH){
+                x = WIDTH-spaceShip.width;
+            }
+            if(y > HEIGHT -spaceShip.height){
+                y = HEIGHT -spaceShip.height;
+            }
+            if(spaceShip.rectFortouch.contains(x,y)){
+                spaceShip.moving(true);
+            }
 
-
-            rect = getRectangle(spaceShip.x, spaceShip.y,spaceShip.width, spaceShip.height);
             System.out.print("x:");System.out.print(x);
             System.out.print("  X:");System.out.println(spaceShip.x);
             System.out.print("y:");System.out.print(y);
@@ -170,8 +178,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         super.draw(canvas);
         final float scaleFactorX = getWidth()/(WIDTH*1.f);
         final float scaleFactorY = getHeight()/(HEIGHT*1.f);
-        copyscaleFactorY = scaleFactorY;
-        copyscaleFactorX = scaleFactorX;
+
 //        System.out.println(getWidth());
 //        System.out.println(getHeight());
 //        System.out.println(scaleFactorX);
