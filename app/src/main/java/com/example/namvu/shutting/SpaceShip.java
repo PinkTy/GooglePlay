@@ -12,6 +12,9 @@ public class SpaceShip extends GameObject {
     private Bitmap spritessheet;
     //    private int score;
     //    private double dya;
+    private int X;
+    private int Y;
+    private boolean move;
     private boolean up;
     private boolean down;
     private boolean left;
@@ -27,13 +30,15 @@ public class SpaceShip extends GameObject {
         dx = 0;
 //        score = 0;
 
-        spritessheet = res;
+
         height = res.getHeight();
         width = res.getWidth();
         System.out.print("height: "+ height);
         System.out.print(" width: "+ width);
-        x = GamePanel.WIDTH/2;
-        y = GamePanel.HEIGHT-height;
+        x = GamePanel.screenWIDTH/2;
+        y = GamePanel.screenHEIGHT-2*height;
+        spritessheet = res;
+
 //        Bitmap[] image = new Bitmap[numFrames];
 //        for(int i = 0; i < image.length; i++){
 //            image[i] = Bitmap.createBitmap( spritessheet,i *width, 0, width, height);
@@ -52,58 +57,31 @@ public class SpaceShip extends GameObject {
         Paint fillPaint = new Paint();
         fillPaint.setColor(Color.RED);
         canvas.drawRect(rect, fillPaint);
-
         canvas.drawBitmap(spritessheet, x,y, null);
     }
     public boolean getPlaying(){return playing;}
-    public int getCentralImageX() {
-//        System.out.println(x);
-////        System.out.println(width);
-        return x + width /2;
-    }
-    public int getCentralImageY() {
-        return y - height /2;
-    }
+
+
     public void setPlaying(boolean playing) {
         this.playing = playing;
     }
 
-    public void setUp(boolean up) {
-        this.up = up;
-    }
+    public void moving(boolean move) {
+        this.move = move;
 
-    public void setDown(boolean down) {
-        this.down = down;
     }
-
-    public void setLeft(boolean left) {
-        this.left = left;
-    }
-
-    public void setRight(boolean right) {
-        this.right = right;
+    public void setXY(int x, int y){
+        X = x;
+        Y = y;
     }
 
 
     public void update(){
 
-        if(up){
-            dy-=20;
-
+        if(move){
+            x = X;
+            y = Y;
         }
-        if(down){
-            dy+=20;
-        }
-        if(right){
-            dx+=20;
-
-        }
-        if(left){
-            dx-=20;
-        }
-        x += dx;
-        y += dy;
-        dy = 0; dx = 0;
         rect = getRectangle();
 
     }
