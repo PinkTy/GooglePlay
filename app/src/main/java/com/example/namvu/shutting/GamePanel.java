@@ -10,15 +10,20 @@ import android.media.MediaPlayer;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
 import android.animation.ObjectAnimator;
 
-
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Random;
 
 
 public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
 {
+    public Dictionary<Integer, Bullet> dictionaryBullets = new Hashtable<>();
+    Integer countBullets = 0;
     private Random rand = new Random();
     public Rect rect;
     Bitmap[] rockImage = new Bitmap[10];
@@ -49,7 +54,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
         setFocusable(true);
 
         //music
-        mMediaPlayer = MediaPlayer.create(game, R.raw.testmusic);
+        mMediaPlayer = MediaPlayer.create(game, R.raw.backgroundmusic);
         mMediaPlayer.setLooping(true);
         if (!mMediaPlayer.isPlaying()) {
             mMediaPlayer.start();
@@ -127,26 +132,44 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
 
         long elapsed = (System.nanoTime() - bulletStartTime)/1000000;
         if(shoot && elapsed > timeDelayShoot){
-            bullets.add(new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.bullet),spaceShip.rect.centerX()-9,spaceShip.rect.top-spaceShip.height+10,-40, 0));
+//
+            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.bullet),spaceShip.rect.centerX()-9,spaceShip.rect.top-spaceShip.height+10,-40, 0));
+            //bullets.add(new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.bullet),spaceShip.rect.centerX()-9,spaceShip.rect.top-spaceShip.height+10,-40, 0));
             bulletStartTime = System.nanoTime();
-        }
-        for(int i = 0; i < bullets.size(); i++){
-            // this is trying to revome the bullets if the bullets out of screen. It works but it so lagging.
-//            if(bullets.get(i).y<-100 ){
-//                bullets.remove(i);
-//                break;
-//            }
-            bullets.get(i).update();
-            // this is trying to found the collision between bullets and rocks but it does not work
-//            for(int n = 0; n < rocks.size(); i++){
-//                if(collision(bullets.get(i), rocks.get(n))){
-//                    bullets.remove(i);
-//                    rocks.remove(n);
-//                    break;
-//            }
+            countBullets += 1;
 
+        }
+
+        for (Enumeration e = dictionaryBullets.keys(); e.hasMoreElements();) {
+            Object object = e.nextElement();
+            if(dictionaryBullets.get(object).y<-100 ){
+               dictionaryBullets.remove(object);
 
             }
+            else{
+                dictionaryBullets.get(object).update();
+            }
+
+
+        }
+//        for(int i = 0; i < bullets.size(); i++){
+//            // this is trying to revome the bullets if the bullets out of screen. It works but it so lagging.
+////            if(bullets.get(i).y<-100 ){
+////                bullets.remove(i);
+////                break;
+////            }
+//            bullets.get(i).update();
+//            // this is trying to found the collision between bullets and rocks but it does not work
+////            for(int n = 0; n < rocks.size(); i++){
+////                if(collision(bullets.get(i), rocks.get(n))){
+////                    bullets.remove(i);
+////                    rocks.remove(n);
+////                    break;}}
+//
+//
+//
+//            }
+
 
         for(int i = 0; i < rocks.size(); i++){
             rocks.get(i).update();
@@ -155,10 +178,14 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
                 rocks.remove(i);
                 newRock(rockImage);
 //                layer.setPlaying(false);
-                break;
+
 
             }
-
+//            for(int n = 0; n < bullets.size(); i++){
+//                if(collision(bullets.get(n), rocks.get(i))){
+//                    bullets.remove(n);
+//                    rocks.remove(i);}}
+//
         }
     }
     // collision function. that check the collision between 2 object of GameObject
@@ -217,9 +244,13 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             canvas.scale(scaleFactorX, scaleFactorY);
             bg.draw(canvas);
             spaceShip.draw(canvas);
-            for(Bullet m:bullets){
-                m.draw(canvas);
+            for (Enumeration e = dictionaryBullets.keys(); e.hasMoreElements();) {
+                dictionaryBullets.get(e.nextElement()).draw(canvas);
+
             }
+//            for(Bullet m:bullets){
+//                m.draw(canvas);
+//            }
             // update rock
             for(Rock r:rocks){
                 r.draw(canvas);

@@ -60,6 +60,8 @@ public class SpaceShip extends GameObject {
     }
 
     public  void draw(Canvas canvas){
+        //adsa
+        
 //        System.out.print(x);
 //        System.out.print(y);
 //        Paint fillPaint1 = new Paint();
