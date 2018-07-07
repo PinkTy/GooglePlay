@@ -96,7 +96,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
         HEIGHT = bg.image.getHeight();
         copyscaleFactorY = getHeight()/(HEIGHT*1.f);
         copyscaleFactorX = getWidth()/(WIDTH*1.f);
-        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(),R.drawable.spaceship),BitmapFactory.decodeResource(getResources(),R.drawable.shield));
+        //spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(),R.drawable.spaceship),BitmapFactory.decodeResource(getResources(),R.drawable.shield));
         bulletStartTime = System.nanoTime();
         // load rock bitmap
 
