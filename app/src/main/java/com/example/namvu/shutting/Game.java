@@ -10,12 +10,15 @@ import android.widget.Toast;
 
 public class Game extends Activity {
     private GameSoundPool sounds;
+    private menu Menu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(new GamePanel(this, sounds));
+        Menu = new menu(this, sounds);
+        setContentView(Menu);
+        //setContentView(new GamePanel(this, sounds));
     }
     private long firstTime = 0;
 
