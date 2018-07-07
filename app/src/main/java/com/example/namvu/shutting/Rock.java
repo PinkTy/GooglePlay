@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Rock extends GameObject {
     private Random rand = new Random();
-    private Bitmap spritessheet;
+    private Bitmap spritessheet, bmpRotate;
     Matrix matrix = new Matrix();
     public long lastupdate;
     public long timenow;
@@ -45,15 +45,16 @@ public class Rock extends GameObject {
 //        if(timenow - lastupdate > 50){
 //            lastupdate = timenow;
 //
-//            Bitmap newbitmap;
 //            rot = (rotspeed + rot) %360;
-    //          RotateBitmap
-            // find on
-//            newbitmap = RotateBitmap(spritessheet, rot);
-//            //float oldcenter = rectangle.exactCenterX();
-//            spritessheet = newbitmap;
+//            Matrix mat = new Matrix();
+//            mat.postRotate(rot);
 //
-//
+//            bmpRotate = Bitmap.createBitmap(spritessheet, 0, 0,
+//                    spritessheet.getWidth(), spritessheet.getHeight(),
+//                    mat, true);
+
+
+
 //
 //        }
 //    }
@@ -78,6 +79,10 @@ public class Rock extends GameObject {
 //            fillPaint.setColor(Color.RED);
 //            canvas.drawRect(rectangle, fillPaint);
             canvas.drawBitmap(spritessheet, x, y, null);
+//            canvas.drawBitmap(bmpRotate, x, y, null);
+//            spritessheet = bmpRotate;
+
+
         }catch (Exception e){
 
         }

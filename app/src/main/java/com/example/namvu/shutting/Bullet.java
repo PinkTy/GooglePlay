@@ -3,6 +3,8 @@ package com.example.namvu.shutting;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.constraint.solver.widgets.Rectangle;
 
@@ -26,11 +28,14 @@ public class Bullet extends GameObject {
     public void update(){
         x -= speedX;
         y += speedY;
-        //rectangle = getRectangle();
+        rectangle = getRectangle();
 
     }
     public void draw(Canvas canvas){
         try{
+//            Paint fillPaint = new Paint();
+//            fillPaint.setColor(Color.RED);
+//            canvas.drawRect(rectangle, fillPaint);
             canvas.drawBitmap(spritessheet, x, y, null);
         }catch (Exception e){
 

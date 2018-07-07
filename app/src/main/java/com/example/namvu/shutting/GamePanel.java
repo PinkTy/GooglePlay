@@ -34,7 +34,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
     public static int screenHEIGHT;
     public static int WIDTH;
     public static int HEIGHT;
-    private boolean shoot;
+    private boolean shoot, delete;
     private MainThread thread;
     private Background bg;
     private long bulletStartTime;
@@ -111,7 +111,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
         rockImage[8] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrowntinyone);
         rockImage[9] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrowntinytwo);
         // create 50 rocks at the start of the game
-        for(int n=0;n < 50; n++) {
+        for(int n=0;n < 100; n++) {
             newRock(rockImage);
         }
 
@@ -134,7 +134,6 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
         if(shoot && elapsed > timeDelayShoot){
 //
             dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.bullet),spaceShip.rect.centerX()-9,spaceShip.rect.top-spaceShip.height+10,-40, 0));
-            //bullets.add(new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.bullet),spaceShip.rect.centerX()-9,spaceShip.rect.top-spaceShip.height+10,-40, 0));
             bulletStartTime = System.nanoTime();
             countBullets += 1;
 
@@ -142,33 +141,35 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
 
         for (Enumeration e = dictionaryBullets.keys(); e.hasMoreElements();) {
             Object object = e.nextElement();
+            delete = false;
+            for(int n = 0; n < rocks.size(); n++) {
+
+                if (collision(rocks.get(n), dictionaryBullets.get(object))) {
+                    delete = true;
+                    dictionaryBullets.remove(object);
+                    rocks.remove(n);
+                    newRock(rockImage);
+                    break;
+                }
+            }
+
+            if(!delete){
+
+
             if(dictionaryBullets.get(object).y<-100 ){
                dictionaryBullets.remove(object);
 
+
             }
             else{
-                dictionaryBullets.get(object).update();
+
+                    dictionaryBullets.get(object).update();
+                }
+
             }
 
-
         }
-//        for(int i = 0; i < bullets.size(); i++){
-//            // this is trying to revome the bullets if the bullets out of screen. It works but it so lagging.
-////            if(bullets.get(i).y<-100 ){
-////                bullets.remove(i);
-////                break;
-////            }
-//            bullets.get(i).update();
-//            // this is trying to found the collision between bullets and rocks but it does not work
-////            for(int n = 0; n < rocks.size(); i++){
-////                if(collision(bullets.get(i), rocks.get(n))){
-////                    bullets.remove(i);
-////                    rocks.remove(n);
-////                    break;}}
-//
-//
-//
-//            }
+
 
 
         for(int i = 0; i < rocks.size(); i++){
@@ -214,10 +215,6 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             if(spaceShip.rectFortouch.contains(x,y)){
                 spaceShip.moving(true);
             }
-//            System.out.print("x:");System.out.print(x);
-//            System.out.print("  X:");System.out.println(spaceShip.x);
-//            System.out.print("y:");System.out.print(y);
-//            System.out.print("  Y:");System.out.println(spaceShip.y);
             spaceShip.setXY(x,y);
             return true;
         }
@@ -246,11 +243,8 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             spaceShip.draw(canvas);
             for (Enumeration e = dictionaryBullets.keys(); e.hasMoreElements();) {
                 dictionaryBullets.get(e.nextElement()).draw(canvas);
-
             }
-//            for(Bullet m:bullets){
-//                m.draw(canvas);
-//            }
+
             // update rock
             for(Rock r:rocks){
                 r.draw(canvas);
