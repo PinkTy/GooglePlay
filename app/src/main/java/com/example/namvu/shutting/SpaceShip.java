@@ -20,7 +20,7 @@ public class SpaceShip extends GameObject {
     public int score = 0;
     private int X;
     private int Y;
-    private boolean move;
+    public boolean move;
     private boolean up;
     private boolean down;
     private boolean left;

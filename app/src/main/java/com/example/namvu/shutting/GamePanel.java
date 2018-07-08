@@ -33,6 +33,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
     Bitmap[] explosionImageR = new Bitmap[9];
     Bitmap[] explosionImageRSmall = new Bitmap[9];
     Bitmap[] explosionImageSonic = new Bitmap[9];
+    Bitmap[] explosionImageSonicSmall = new Bitmap[9];
     public static int copySavestate;
     public static float copyscaleFactorX;
     public static float copyscaleFactorY;
@@ -145,10 +146,14 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
         explosionImageSonic[6] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion06);
         explosionImageSonic[7] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion07);
         explosionImageSonic[8] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion08);
-
+        for(int i = 0; i < explosionImageSonic.length; i++) {
+            int w = explosionImageSonic[i].getWidth()/2;
+            int h = explosionImageSonic[i].getHeight()/2;
+            explosionImageSonicSmall[i] = Bitmap.createScaledBitmap(explosionImageSonic[i],w,h, false);
+        }
 
         // create 50 rocks at the start of the game
-        for(int n=0;n < 50; n++) {
+        for(int n=0;n < 5; n++) {
             newRock(rockImage);
         }
 
@@ -217,7 +222,11 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             // check the collision between rocks and the ship it work but a bit lag
             if(collision(rocks.get(i), spaceShip)){
                 spaceShip.health -= rocks.get(i).width/2;
-                if (spaceShip.health<0) spaceShip.health =0;
+                if (spaceShip.health<0) {
+                    explosions.add(new Explosion(explosionImageSonicSmall,spaceShip.x-60,spaceShip.rect.top-90));
+                    spaceShip.health =0;
+                    spaceShip.moving(false);
+                spaceShip.setY(-500);}
                 spaceShip.score += rocks.get(i).width;
                 explosions.add(new Explosion(explosionImageRSmall,rocks.get(i).rectangle.centerX(),rocks.get(i).rectangle.centerY()));
                 rocks.remove(i);
@@ -250,10 +259,17 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
     public boolean onTouchEvent(MotionEvent event)
     {//
         if(event.getAction() == MotionEvent.ACTION_DOWN){
+            int x = (int)(event.getRawX()/copyscaleFactorX);
+            int y = (int)(event.getRawY()/copyscaleFactorY);
             shoot(true);
+            if (spaceShip.rectFortouch.contains(x,y)){
+                spaceShip.setXY(x,y);
+                spaceShip.moving(true);
+            }
+
             return true;
         }
-        if(event.getAction() == MotionEvent.ACTION_MOVE){
+        if(event.getAction() == MotionEvent.ACTION_MOVE && spaceShip.move){
             int x = (int)(event.getRawX()/copyscaleFactorX);
             int y = (int)(event.getRawY()/copyscaleFactorY);
             if(x+spaceShip.width > WIDTH){
