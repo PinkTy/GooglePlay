@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -27,6 +28,9 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
     private Random rand = new Random();
     public Rect rect;
     Bitmap[] rockImage = new Bitmap[10];
+    Bitmap[] explosionImageR = new Bitmap[9];
+    Bitmap[] explosionImageRSmall = new Bitmap[9];
+    Bitmap[] explosionImageSonic = new Bitmap[9];
     public static int copySavestate;
     public static float copyscaleFactorX;
     public static float copyscaleFactorY;
@@ -41,6 +45,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
     public long timeDelayShoot = 0;
     private SpaceShip spaceShip;
     public static ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+    public static ArrayList<Explosion> explosions = new ArrayList<Explosion>();
     public static ArrayList<Rock> rocks = new ArrayList<Rock>();
     private MediaPlayer mMediaPlayer;
     public GamePanel(Context context, GameSoundPool sounds)
@@ -110,8 +115,38 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
         rockImage[7] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrownsmalltwo);
         rockImage[8] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrowntinyone);
         rockImage[9] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrowntinytwo);
+
+        // load Regular Explosion
+        explosionImageR[0] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion00);
+        explosionImageR[1] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion01);
+        explosionImageR[2] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion02);
+        explosionImageR[3] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion03);
+        explosionImageR[4] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion04);
+        explosionImageR[5] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion05);
+        explosionImageR[6] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion06);
+        explosionImageR[7] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion07);
+        explosionImageR[8] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion08);
+        for(int i = 0; i < explosionImageR.length; i++) {
+            int w = explosionImageR[i].getWidth()/3;
+            int h = explosionImageR[i].getHeight()/3;
+            explosionImageRSmall[i] = Bitmap.createScaledBitmap(explosionImageR[i],w,h, false);
+        }
+
+
+        // load Sonic Explosion
+        explosionImageSonic[0] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion00);
+        explosionImageSonic[1] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion01);
+        explosionImageSonic[2] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion02);
+        explosionImageSonic[3] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion03);
+        explosionImageSonic[4] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion04);
+        explosionImageSonic[5] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion05);
+        explosionImageSonic[6] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion06);
+        explosionImageSonic[7] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion07);
+        explosionImageSonic[8] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion08);
+
+
         // create 50 rocks at the start of the game
-        for(int n=0;n < 100; n++) {
+        for(int n=0;n < 50; n++) {
             newRock(rockImage);
         }
 
@@ -145,9 +180,11 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             for(int n = 0; n < rocks.size(); n++) {
 
                 if (collision(rocks.get(n), dictionaryBullets.get(object))) {
+                    explosions.add(new Explosion(explosionImageRSmall,rocks.get(n).rectangle.centerX(),rocks.get(n).rectangle.centerY()));
                     delete = true;
                     dictionaryBullets.remove(object);
                     rocks.remove(n);
+
                     newRock(rockImage);
                     break;
                 }
@@ -176,6 +213,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             rocks.get(i).update();
             // check the collision between rocks and the ship it work but a bit lag
             if(collision(rocks.get(i), spaceShip)){
+                explosions.add(new Explosion(explosionImageRSmall,rocks.get(i).rectangle.centerX(),rocks.get(i).rectangle.centerY()));
                 rocks.remove(i);
                 newRock(rockImage);
 //                layer.setPlaying(false);
@@ -187,6 +225,12 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
 //                    bullets.remove(n);
 //                    rocks.remove(i);}}
 //
+        }
+        for(int i = 0; i < explosions.size(); i++) {
+            explosions.get(i).update();
+            if (explosions.get(i).remove){
+                explosions.remove(i);
+            }
         }
     }
     // collision function. that check the collision between 2 object of GameObject
@@ -248,6 +292,9 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             // update rock
             for(Rock r:rocks){
                 r.draw(canvas);
+            }
+            for(Explosion e:explosions){
+                e.draw(canvas);
             }
             canvas.restoreToCount(savedState);
             copySavestate = savedState;
