@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.media.Image;
 import android.media.MediaPlayer;
 import android.view.MotionEvent;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -180,6 +182,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             for(int n = 0; n < rocks.size(); n++) {
 
                 if (collision(rocks.get(n), dictionaryBullets.get(object))) {
+                    spaceShip.score += rocks.get(n).width;
                     explosions.add(new Explosion(explosionImageRSmall,rocks.get(n).rectangle.centerX(),rocks.get(n).rectangle.centerY()));
                     delete = true;
                     dictionaryBullets.remove(object);
@@ -213,6 +216,9 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             rocks.get(i).update();
             // check the collision between rocks and the ship it work but a bit lag
             if(collision(rocks.get(i), spaceShip)){
+                spaceShip.health -= rocks.get(i).width/2;
+                if (spaceShip.health<0) spaceShip.health =0;
+                spaceShip.score += rocks.get(i).width;
                 explosions.add(new Explosion(explosionImageRSmall,rocks.get(i).rectangle.centerX(),rocks.get(i).rectangle.centerY()));
                 rocks.remove(i);
                 newRock(rockImage);
@@ -269,6 +275,39 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
         }
         return super.onTouchEvent(event);
     }
+    public void drawText(Canvas canvas, int shipHealth){
+        Paint paint = new Paint();
+
+        float green  = (shipHealth*1.f/100*1.f)*225;
+        float red  = (1-(shipHealth*1.f/100*1.f))*225 ;
+        int barLength = (int)  ((shipHealth*1.f/100*1.f)*200);
+//        if (green < 0) green =0;
+//        if (red > 225) red =225;
+//        if (barLength < 0) barLength =0;
+
+        paint.setColor(Color.rgb((int) red,(int) green,0));
+        Paint paint1 = new Paint();
+        paint1.setColor(Color.WHITE);
+        paint1.setTextSize(40);
+        paint1.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        canvas.drawText(""+spaceShip.score, WIDTH/2-50, 40, paint1);
+
+
+        int barHeight = 10;
+        float fill = (shipHealth*1.f/100*1.f)* (barLength*1.f);
+        Rect barHealth = new Rect(5, 5,5+ barLength, barHeight);
+
+
+        canvas.drawRect(barHealth, paint);
+        canvas.drawLine(5, 4, 5+ 200+1, 4,paint);
+        canvas.drawLine(5, barHeight, 5+ 200+1, barHeight,paint);
+        canvas.drawLine(5, 4, 5, barHeight,paint);
+        canvas.drawLine(5+ 200+1, barHeight, 5+ 200+1, 4,paint);
+
+
+
+    }
+
     @Override
     public void draw(Canvas canvas)
     {
@@ -296,6 +335,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             for(Explosion e:explosions){
                 e.draw(canvas);
             }
+            drawText(canvas, spaceShip.health);
             canvas.restoreToCount(savedState);
             copySavestate = savedState;
         }
