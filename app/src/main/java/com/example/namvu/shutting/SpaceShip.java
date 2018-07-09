@@ -13,14 +13,11 @@ public class SpaceShip extends GameObject {
 
     private Bitmap spritessheet;
     private Bitmap shield;
-
     //    private int score;
     //    private double dya;
-    public int health = 100;
-    public int score = 0;
     private int X;
     private int Y;
-    public boolean move;
+    private boolean move;
     private boolean up;
     private boolean down;
     private boolean left;

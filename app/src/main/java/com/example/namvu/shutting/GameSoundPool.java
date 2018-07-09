@@ -21,7 +21,7 @@ public class GameSoundPool {
     }
 
     public void initGameSound() {
-        map.put(1, soundPool.load(game, R.raw.backgroundmusic, 1));
+        map.put(1, soundPool.load(game, R.raw.testmusic, 1));
     }
 
     public void playSound(int sound, int loop) {
