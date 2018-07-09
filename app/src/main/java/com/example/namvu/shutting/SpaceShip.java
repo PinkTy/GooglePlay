@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 public class SpaceShip extends GameObject {
 
     private Bitmap spritessheet;
+    private Bitmap shield;
     //    private int score;
     //    private double dya;
     private int X;
@@ -26,7 +27,7 @@ public class SpaceShip extends GameObject {
     public Rect rectFortouch;
     //    private Animation animation = new Animation();
     private long startTime;
-    public SpaceShip(Bitmap res){
+    public SpaceShip(Bitmap res, Bitmap shield){
         //System.out.println(GamePanel.WIDTH);
 
         dy = 0;
@@ -41,6 +42,8 @@ public class SpaceShip extends GameObject {
         x = GamePanel.WIDTH/2;
         y = GamePanel.HEIGHT-height;
         spritessheet = res;
+        this.shield = shield;
+//        this.shield = Bitmap.createScaledBitmap(this.shield,2,3,true);
 
 //        Bitmap[] image = new Bitmap[numFrames];
 //        for(int i = 0; i < image.length; i++){
@@ -55,16 +58,21 @@ public class SpaceShip extends GameObject {
 
 
     }
+
     public  void draw(Canvas canvas){
+        //adsa
+        
 //        System.out.print(x);
 //        System.out.print(y);
 //        Paint fillPaint1 = new Paint();
 //        fillPaint1.setColor(Color.YELLOW);
 //        canvas.drawRect(rectFortouch, fillPaint1);
-        Paint fillPaint = new Paint();
-        fillPaint.setColor(Color.RED);
-        canvas.drawRect(rect, fillPaint);
+//        Paint fillPaint = new Paint();
+//        fillPaint.setColor(Color.RED);
+//        canvas.drawRect(rect, fillPaint);
         canvas.drawBitmap(spritessheet, x,y, null);
+        //add shield bitmap
+        canvas.drawBitmap(shield, x-20,y-25, null);
     }
     public boolean getPlaying(){return playing;}
     public Rect getRectangleTouch(){
@@ -94,6 +102,7 @@ public class SpaceShip extends GameObject {
         }
         rect = getRectangle();
         rectFortouch = getRectangleTouch();
+
 
     }
 
