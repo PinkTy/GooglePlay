@@ -4,20 +4,27 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Rect;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+
 
 @SuppressLint("ViewConstructor")
 public class menu extends BaseWindow{
     private float button_x;
     private float button_y;
-    private float strwid;
-    private float strhei;
+    private float button1_x;
+    private float button1_y;
+    private float line_x;
+    private float line_y;
+    private float line1_x;
+    private float line1_y;
     private boolean isBtChange;
-    private String startGame = "Start Game";
-    private Bitmap button;
+    private Bitmap newGame;
+    private Bitmap line;
+    private Bitmap line1;
     private Bitmap background;
+    private Bitmap store;
     private Rect rect;
 
     public menu(Context context, GameSoundPool sounds) {
@@ -50,56 +57,71 @@ public class menu extends BaseWindow{
         release();
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN
+                && event.getPointerCount() == 1) {
+            float x = event.getX();
+            float y = event.getY();
+            if (x > button_x && x < button_x + newGame.getWidth()
+                    && y > button_y && y < button_y + newGame.getHeight()) {
+                //sounds.playSound(1,0);
+                isBtChange = true;
+                drawSelf();
+                game.getHandler().sendEmptyMessage(ConstantUtil.TO_GAME_PANEL);
+            }
+            return true;
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            float x = event.getX();
+            float y = event.getY();
+            if (x > button_x && x < button_x + newGame.getWidth()
+                    && y > button_y && y < button_y + newGame.getHeight()) {
+                isBtChange = true;
+            } else {
+                isBtChange = false;
+            }
+            return true;
+        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+            isBtChange = false;
+            return true;
+        }
+        return false;
+    }
+
     public void initBitmap() {
-        background = BitmapFactory.decodeResource(getResources(), R.drawable.bg_01);
-        //button = BitmapFactory.decodeResource(getResources(), R.drawable.button);
+        background = BitmapFactory.decodeResource(getResources(), R.drawable.background);
+        newGame = BitmapFactory.decodeResource(getResources(), R.drawable.newgame);
+        store = BitmapFactory.decodeResource(getResources(), R.drawable.store);
+        line = BitmapFactory.decodeResource(getResources(), R.drawable.line);
+        line1 = BitmapFactory.decodeResource(getResources(), R.drawable.line);
         scalex = screen_width / background.getWidth();
         scaley = screen_height / background.getHeight();
 
-        button_x = screen_width / 2 - button.getWidth() / 2;
-        button_y = screen_height / 2 + button.getHeight();
-
-        paint.getTextBounds(startGame, 0, startGame.length(), rect);
-        strwid = rect.width();
-        strhei = rect.height();
+        button_x = screen_width / 2 - newGame.getWidth() / 2;
+        button_y = screen_height / 2 + newGame.getHeight();
+        line_x = button_x + 7;
+        line_y = button_y + 95;
+        button1_x = button_x + 75;
+        button1_y = button_y + 215;
+        line1_x = line_x;
+        line1_y = line_y + 215;
     }
 
-
-    @Override
-    public void release() {
-        if (!background.isRecycled()) {
-            background.recycle();
-        }
-    }
     @Override
     public void drawSelf() {
         try {
             canvas = sfh.lockCanvas();
-            canvas.drawColor(Color.BLACK);
             canvas.save();
             canvas.scale(scalex, scaley, 0, 0);
             canvas.drawBitmap(background, 0, 0, paint);
             canvas.restore();
-//            if (isBtChange) {
-//                canvas.drawBitmap(button2, button_x, button_y, paint);
-//            } else {
-//                canvas.drawBitmap(button, button_x, button_y, paint);
-//            }
-//            if (isBtChange2) {
-//                canvas.drawBitmap(button2, button_x, button_y2, paint);
-//            } else {
-//                canvas.drawBitmap(button, button_x, button_y2, paint);
-//            }
-//
-//
-//            paint.setColor(Color.BLACK);
-//            canvas.drawText(startGame, screen_width / 2 - strwid / 2, button_y
-//                    + button.getHeight() / 2 + strhei / 2, paint);
-//
-//            canvas.drawText(exitGame, screen_width / 2 - strwid / 2, button_y2
-//                    + button.getHeight() / 2 + strhei / 2, paint);
+            canvas.drawBitmap(newGame, button_x, button_y, paint);
+            canvas.drawBitmap(line, line_x, line_y, paint);
+            canvas.drawBitmap(store, button1_x, button1_y, paint);
+            canvas.drawBitmap(line, line1_x, line1_y, paint);
+            canvas.restore();
 
-          //  canvas.restore();
+
         } catch (Exception err) {
             err.printStackTrace();
         } finally {

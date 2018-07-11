@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.Random;
 
 
@@ -62,7 +60,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
         setFocusable(true);
 
         //music
-        mMediaPlayer = MediaPlayer.create(game, R.raw.backgroundmusic);
+        mMediaPlayer = MediaPlayer.create(game, R.raw.testmusic);
         mMediaPlayer.setLooping(true);
         if (!mMediaPlayer.isPlaying()) {
             mMediaPlayer.start();

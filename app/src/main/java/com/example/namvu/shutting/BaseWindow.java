@@ -9,18 +9,18 @@ import android.view.SurfaceView;
 
 @SuppressLint("ViewConstructor")
 public class BaseWindow extends SurfaceView implements SurfaceHolder.Callback, Runnable{
-    protected int currentFrame;
-    protected float scalex;
-    protected float scaley;
-    protected float screen_width;
-    protected float screen_height;
-    protected boolean threadFlag;
-    protected Paint paint;
-    protected Canvas canvas;
-    protected Thread thread;
-    protected SurfaceHolder sfh;
-    protected GameSoundPool sounds;
-    protected Game game;
+    public int currentFrame;
+    public float scalex;
+    public float scaley;
+    public float screen_width;
+    public float screen_height;
+    public boolean threadFlag;
+    public Paint paint;
+    public Canvas canvas;
+    public Thread thread;
+    public SurfaceHolder sfh;
+    public GameSoundPool sounds;
+    public Game game;
 
 
     public BaseWindow(Context context, GameSoundPool sounds) {
