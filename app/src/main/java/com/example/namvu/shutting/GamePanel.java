@@ -54,7 +54,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
         setFocusable(true);
 
         //music
-        mMediaPlayer = MediaPlayer.create(game, R.raw.backgroundmusic);
+        mMediaPlayer = MediaPlayer.create(game, R.raw.testmusic);
         mMediaPlayer.setLooping(true);
         if (!mMediaPlayer.isPlaying()) {
             mMediaPlayer.start();

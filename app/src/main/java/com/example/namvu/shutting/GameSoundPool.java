@@ -17,11 +17,11 @@ public class GameSoundPool {
     public GameSoundPool(Game game) {
         this.game = game;
         map = new HashMap<Integer, Integer>();
-        soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
     }
 
     public void initGameSound() {
-        map.put(1, soundPool.load(game, R.raw.testmusic, 1));
+        map.put(1, soundPool.load(game, R.raw.button, 1));
     }
 
     public void playSound(int sound, int loop) {
