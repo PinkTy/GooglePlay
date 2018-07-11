@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -27,6 +28,10 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
     private Random rand = new Random();
     public Rect rect;
     Bitmap[] rockImage = new Bitmap[10];
+    Bitmap[] explosionImageR = new Bitmap[9];
+    Bitmap[] explosionImageRSmall = new Bitmap[9];
+    Bitmap[] explosionImageSonic = new Bitmap[9];
+    Bitmap[] explosionImageSonicSmall = new Bitmap[9];
     public static int copySavestate;
     public static float copyscaleFactorX;
     public static float copyscaleFactorY;
@@ -41,6 +46,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
     public long timeDelayShoot = 0;
     private SpaceShip spaceShip;
     public static ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+    public static ArrayList<Explosion> explosions = new ArrayList<Explosion>();
     public static ArrayList<Rock> rocks = new ArrayList<Rock>();
     private MediaPlayer mMediaPlayer;
     public GamePanel(Context context, GameSoundPool sounds)
@@ -110,8 +116,42 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
         rockImage[7] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrownsmalltwo);
         rockImage[8] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrowntinyone);
         rockImage[9] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrowntinytwo);
+
+        // load Regular Explosion
+        explosionImageR[0] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion00);
+        explosionImageR[1] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion01);
+        explosionImageR[2] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion02);
+        explosionImageR[3] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion03);
+        explosionImageR[4] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion04);
+        explosionImageR[5] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion05);
+        explosionImageR[6] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion06);
+        explosionImageR[7] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion07);
+        explosionImageR[8] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion08);
+        for(int i = 0; i < explosionImageR.length; i++) {
+            int w = explosionImageR[i].getWidth()/3;
+            int h = explosionImageR[i].getHeight()/3;
+            explosionImageRSmall[i] = Bitmap.createScaledBitmap(explosionImageR[i],w,h, false);
+        }
+
+
+        // load Sonic Explosion
+        explosionImageSonic[0] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion00);
+        explosionImageSonic[1] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion01);
+        explosionImageSonic[2] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion02);
+        explosionImageSonic[3] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion03);
+        explosionImageSonic[4] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion04);
+        explosionImageSonic[5] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion05);
+        explosionImageSonic[6] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion06);
+        explosionImageSonic[7] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion07);
+        explosionImageSonic[8] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion08);
+        for(int i = 0; i < explosionImageSonic.length; i++) {
+            int w = explosionImageSonic[i].getWidth()/2;
+            int h = explosionImageSonic[i].getHeight()/2;
+            explosionImageSonicSmall[i] = Bitmap.createScaledBitmap(explosionImageSonic[i],w,h, false);
+        }
+
         // create 50 rocks at the start of the game
-        for(int n=0;n < 100; n++) {
+        for(int n=0;n < 5; n++) {
             newRock(rockImage);
         }
 
@@ -145,9 +185,12 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             for(int n = 0; n < rocks.size(); n++) {
 
                 if (collision(rocks.get(n), dictionaryBullets.get(object))) {
+                    spaceShip.score += rocks.get(n).width;
+                    explosions.add(new Explosion(explosionImageRSmall,rocks.get(n).rectangle.centerX(),rocks.get(n).rectangle.centerY()));
                     delete = true;
                     dictionaryBullets.remove(object);
                     rocks.remove(n);
+
                     newRock(rockImage);
                     break;
                 }
@@ -176,6 +219,14 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             rocks.get(i).update();
             // check the collision between rocks and the ship it work but a bit lag
             if(collision(rocks.get(i), spaceShip)){
+                spaceShip.health -= rocks.get(i).width/2;
+                if (spaceShip.health<0) {
+                    explosions.add(new Explosion(explosionImageSonicSmall,spaceShip.x-60,spaceShip.rect.top-90));
+                    spaceShip.health =0;
+                    spaceShip.moving(false);
+                spaceShip.setY(-500);}
+                spaceShip.score += rocks.get(i).width;
+                explosions.add(new Explosion(explosionImageRSmall,rocks.get(i).rectangle.centerX(),rocks.get(i).rectangle.centerY()));
                 rocks.remove(i);
                 newRock(rockImage);
 //                layer.setPlaying(false);
@@ -187,6 +238,12 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
 //                    bullets.remove(n);
 //                    rocks.remove(i);}}
 //
+        }
+        for(int i = 0; i < explosions.size(); i++) {
+            explosions.get(i).update();
+            if (explosions.get(i).remove){
+                explosions.remove(i);
+            }
         }
     }
     // collision function. that check the collision between 2 object of GameObject
@@ -200,10 +257,17 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
     public boolean onTouchEvent(MotionEvent event)
     {//
         if(event.getAction() == MotionEvent.ACTION_DOWN){
+            int x = (int)(event.getRawX()/copyscaleFactorX);
+            int y = (int)(event.getRawY()/copyscaleFactorY);
             shoot(true);
+            if (spaceShip.rectFortouch.contains(x,y)){
+                spaceShip.setXY(x,y);
+                spaceShip.moving(true);
+            }
+
             return true;
         }
-        if(event.getAction() == MotionEvent.ACTION_MOVE){
+        if(event.getAction() == MotionEvent.ACTION_MOVE && spaceShip.move){
             int x = (int)(event.getRawX()/copyscaleFactorX);
             int y = (int)(event.getRawY()/copyscaleFactorY);
             if(x+spaceShip.width > WIDTH){
@@ -225,6 +289,39 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
         }
         return super.onTouchEvent(event);
     }
+    public void drawText(Canvas canvas, int shipHealth){
+        Paint paint = new Paint();
+
+        float green  = (shipHealth*1.f/100*1.f)*225;
+        float red  = (1-(shipHealth*1.f/100*1.f))*225 ;
+        int barLength = (int)  ((shipHealth*1.f/100*1.f)*200);
+//        if (green < 0) green =0;
+//        if (red > 225) red =225;
+//        if (barLength < 0) barLength =0;
+
+        paint.setColor(Color.rgb((int) red,(int) green,0));
+        Paint paint1 = new Paint();
+        paint1.setColor(Color.WHITE);
+        paint1.setTextSize(40);
+        paint1.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        canvas.drawText(""+spaceShip.score, WIDTH/2-50, 40, paint1);
+
+
+        int barHeight = 10;
+        float fill = (shipHealth*1.f/100*1.f)* (barLength*1.f);
+        Rect barHealth = new Rect(5, 5,5+ barLength, barHeight);
+
+
+        canvas.drawRect(barHealth, paint);
+        canvas.drawLine(5, 4, 5+ 200+1, 4,paint);
+        canvas.drawLine(5, barHeight, 5+ 200+1, barHeight,paint);
+        canvas.drawLine(5, 4, 5, barHeight,paint);
+        canvas.drawLine(5+ 200+1, barHeight, 5+ 200+1, 4,paint);
+
+
+
+    }
+
     @Override
     public void draw(Canvas canvas)
     {
@@ -249,6 +346,10 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             for(Rock r:rocks){
                 r.draw(canvas);
             }
+            for(Explosion e:explosions){
+                e.draw(canvas);
+            }
+            drawText(canvas, spaceShip.health);
             canvas.restoreToCount(savedState);
             copySavestate = savedState;
         }
