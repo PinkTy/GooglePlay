@@ -1,18 +1,26 @@
 package com.example.namvu.shutting;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
+import android.provider.Settings;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import android.animation.ObjectAnimator;
+import android.view.View;
+
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -21,37 +29,51 @@ import java.util.Hashtable;
 import java.util.Random;
 
 
-public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
-{
+public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
     public Dictionary<Integer, Bullet> dictionaryBullets = new Hashtable<>();
     Integer countBullets = 0;
+
     private Random rand = new Random();
-    public Rect rect;
+    public Rect rect, rectTryagain;
+    private long timeCount;
+    private long delayBeforeStartLevel;
+    private int timeToCreateRock;
+    private int level = 0;
+    private int firstTime = 1;
     Bitmap[] rockImage = new Bitmap[10];
     Bitmap[] explosionImageR = new Bitmap[9];
     Bitmap[] explosionImageRSmall = new Bitmap[9];
     Bitmap[] explosionImageSonic = new Bitmap[9];
     Bitmap[] explosionImageSonicSmall = new Bitmap[9];
+
     public static int copySavestate;
     public static float copyscaleFactorX;
     public static float copyscaleFactorY;
     public static int screenWIDTH;
     public static int screenHEIGHT;
+    public static int scoregame1, scoregame2, scoregame3;
+    public static int highScoregame1;
+    public static int highScoregame2;
+    public static int highScoregame3;
+
+
     public static int WIDTH;
     public static int HEIGHT;
     private boolean shoot, delete;
+    public static boolean gameOver = false;
     private MainThread thread;
     private Background bg;
     private long bulletStartTime;
-    public long timeDelayShoot = 0;
+    public long timeDelayShoot = 200;
     private SpaceShip spaceShip;
+    private Bitmap gameover, highscore, tryagain;
     public static ArrayList<Bullet> bullets = new ArrayList<Bullet>();
     public static ArrayList<Explosion> explosions = new ArrayList<Explosion>();
     public static ArrayList<Rock> rocks = new ArrayList<Rock>();
     private MediaPlayer mMediaPlayer;
-    public GamePanel(Context context, GameSoundPool sounds)
-    {
-        super(context,sounds);
+
+    public GamePanel(Context context, GameSoundPool sounds) {
+        super(context, sounds);
 
         //add the callback to the surfaceholder to intercept events
         getHolder().addCallback(this);
@@ -66,93 +88,133 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
             mMediaPlayer.start();
         }
     }
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){}
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder){
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
         boolean retry = true;
-        while(retry)
-        {
-            try{thread.setRunning(false);
+        while (retry) {
+            try {
+                thread.setRunning(false);
                 thread.join();
 
-            }catch(InterruptedException e){e.printStackTrace();}
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             retry = false;
         }
 
     }
-    public Rect getRectangle(int x, int y, int width, int height){
-        return new Rect(x,y, x+width, y+height);
+
+    public Rect getRectangle(int x, int y, int width, int height) {
+        return new Rect(x, y, x + width, y + height);
     }
-    public boolean shoot(boolean shot){
+
+    public boolean shoot(boolean shot) {
         return shoot = shot;
     }
-    // this function create a new Rock. the fall from the top of the screen
-    public void newRock(Bitmap[] rockimages){
 
-        int i = 0 + rand.nextInt(10 -  1);
-        rocks.add(new Rock(rockimages[i]));
+    public void savedata() {
+
+
     }
+
+    // this function create a new Rock. the fall from the top of the screen
+    public void newRock(Bitmap[] rockimages) {
+
+        int i = 0 + rand.nextInt(10 - 1);
+        rocks.add(new Rock(rockimages[i], spaceShip.timeChange));
+    }
+
     @Override
-    public void surfaceCreated(SurfaceHolder holder){
+    public void surfaceCreated(SurfaceHolder holder) {
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background));
         bg.setVector(5);
+        timeCount = System.nanoTime();
         WIDTH = bg.image.getWidth();
         HEIGHT = bg.image.getHeight();
-        copyscaleFactorY = getHeight()/(HEIGHT*1.f);
-        copyscaleFactorX = getWidth()/(WIDTH*1.f);
-        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(),R.drawable.spaceship),BitmapFactory.decodeResource(getResources(),R.drawable.shield));
+        copyscaleFactorY = getHeight() / (HEIGHT * 1.f);
+        copyscaleFactorX = getWidth() / (WIDTH * 1.f);
+        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.spaceship), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
         bulletStartTime = System.nanoTime();
+        // load bitmap of gameover
+        gameover = BitmapFactory.decodeResource(getResources(), R.drawable.gameover);
+        gameover = Bitmap.createScaledBitmap(gameover, gameover.getWidth() / 2, gameover.getHeight() / 2, false);
+        highscore = BitmapFactory.decodeResource(getResources(), R.drawable.highscore);
+        highscore = Bitmap.createScaledBitmap(highscore, highscore.getWidth() / 3, highscore.getHeight() / 3, false);
+        tryagain = BitmapFactory.decodeResource(getResources(), R.drawable.tryagain);
+        tryagain = Bitmap.createScaledBitmap(tryagain, tryagain.getWidth() / 3, tryagain.getHeight() / 3, false);
         // load rock bitmap
 
-        rockImage[0] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrownbigfour);
-        rockImage[1] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrownbigone);
-        rockImage[2] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrownbigtwo);
-        rockImage[3] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrownbigthree);
-        rockImage[4] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrownmedone);
-        rockImage[5] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrownmedtwo);
-        rockImage[6] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrownsmallone);
-        rockImage[7] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrownsmalltwo);
-        rockImage[8] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrowntinyone);
-        rockImage[9] = BitmapFactory.decodeResource(getResources(),R.drawable.meteorbrowntinytwo);
+        rockImage[0] = BitmapFactory.decodeResource(getResources(), R.drawable.meteorbrownbigfour);
+        rockImage[1] = BitmapFactory.decodeResource(getResources(), R.drawable.meteorbrownbigone);
+        rockImage[2] = BitmapFactory.decodeResource(getResources(), R.drawable.meteorbrownbigtwo);
+        rockImage[3] = BitmapFactory.decodeResource(getResources(), R.drawable.meteorbrownbigthree);
+        rockImage[4] = BitmapFactory.decodeResource(getResources(), R.drawable.meteorbrownmedone);
+        rockImage[5] = BitmapFactory.decodeResource(getResources(), R.drawable.meteorbrownmedtwo);
+        rockImage[6] = BitmapFactory.decodeResource(getResources(), R.drawable.meteorbrownsmallone);
+        rockImage[7] = BitmapFactory.decodeResource(getResources(), R.drawable.meteorbrownsmalltwo);
+        rockImage[8] = BitmapFactory.decodeResource(getResources(), R.drawable.meteorbrowntinyone);
+        rockImage[9] = BitmapFactory.decodeResource(getResources(), R.drawable.meteorbrowntinytwo);
 
         // load Regular Explosion
-        explosionImageR[0] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion00);
-        explosionImageR[1] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion01);
-        explosionImageR[2] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion02);
-        explosionImageR[3] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion03);
-        explosionImageR[4] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion04);
-        explosionImageR[5] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion05);
-        explosionImageR[6] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion06);
-        explosionImageR[7] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion07);
-        explosionImageR[8] = BitmapFactory.decodeResource(getResources(),R.drawable.regularexplosion08);
-        for(int i = 0; i < explosionImageR.length; i++) {
-            int w = explosionImageR[i].getWidth()/3;
-            int h = explosionImageR[i].getHeight()/3;
-            explosionImageRSmall[i] = Bitmap.createScaledBitmap(explosionImageR[i],w,h, false);
+        explosionImageR[0] = BitmapFactory.decodeResource(getResources(), R.drawable.regularexplosion00);
+        explosionImageR[1] = BitmapFactory.decodeResource(getResources(), R.drawable.regularexplosion01);
+        explosionImageR[2] = BitmapFactory.decodeResource(getResources(), R.drawable.regularexplosion02);
+        explosionImageR[3] = BitmapFactory.decodeResource(getResources(), R.drawable.regularexplosion03);
+        explosionImageR[4] = BitmapFactory.decodeResource(getResources(), R.drawable.regularexplosion04);
+        explosionImageR[5] = BitmapFactory.decodeResource(getResources(), R.drawable.regularexplosion05);
+        explosionImageR[6] = BitmapFactory.decodeResource(getResources(), R.drawable.regularexplosion06);
+        explosionImageR[7] = BitmapFactory.decodeResource(getResources(), R.drawable.regularexplosion07);
+        explosionImageR[8] = BitmapFactory.decodeResource(getResources(), R.drawable.regularexplosion08);
+        for (int i = 0; i < explosionImageR.length; i++) {
+            int w = explosionImageR[i].getWidth() / 3;
+            int h = explosionImageR[i].getHeight() / 3;
+            explosionImageRSmall[i] = Bitmap.createScaledBitmap(explosionImageR[i], w, h, false);
         }
 
 
         // load Sonic Explosion
-        explosionImageSonic[0] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion00);
-        explosionImageSonic[1] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion01);
-        explosionImageSonic[2] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion02);
-        explosionImageSonic[3] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion03);
-        explosionImageSonic[4] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion04);
-        explosionImageSonic[5] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion05);
-        explosionImageSonic[6] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion06);
-        explosionImageSonic[7] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion07);
-        explosionImageSonic[8] = BitmapFactory.decodeResource(getResources(),R.drawable.sonicexplosion08);
-        for(int i = 0; i < explosionImageSonic.length; i++) {
-            int w = explosionImageSonic[i].getWidth()/2;
-            int h = explosionImageSonic[i].getHeight()/2;
-            explosionImageSonicSmall[i] = Bitmap.createScaledBitmap(explosionImageSonic[i],w,h, false);
+        explosionImageSonic[0] = BitmapFactory.decodeResource(getResources(), R.drawable.sonicexplosion00);
+        explosionImageSonic[1] = BitmapFactory.decodeResource(getResources(), R.drawable.sonicexplosion01);
+        explosionImageSonic[2] = BitmapFactory.decodeResource(getResources(), R.drawable.sonicexplosion02);
+        explosionImageSonic[3] = BitmapFactory.decodeResource(getResources(), R.drawable.sonicexplosion03);
+        explosionImageSonic[4] = BitmapFactory.decodeResource(getResources(), R.drawable.sonicexplosion04);
+        explosionImageSonic[5] = BitmapFactory.decodeResource(getResources(), R.drawable.sonicexplosion05);
+        explosionImageSonic[6] = BitmapFactory.decodeResource(getResources(), R.drawable.sonicexplosion06);
+        explosionImageSonic[7] = BitmapFactory.decodeResource(getResources(), R.drawable.sonicexplosion07);
+        explosionImageSonic[8] = BitmapFactory.decodeResource(getResources(), R.drawable.sonicexplosion08);
+        for (int i = 0; i < explosionImageSonic.length; i++) {
+            int w = explosionImageSonic[i].getWidth() / 2;
+            int h = explosionImageSonic[i].getHeight() / 2;
+            explosionImageSonicSmall[i] = Bitmap.createScaledBitmap(explosionImageSonic[i], w, h, false);
         }
 
         // create 50 rocks at the start of the game
-        for(int n=0;n < 5; n++) {
-            newRock(rockImage);
+        switch (ConstantUtil.STYLE) {
+            //create rock for avoid Rock game
+            case 1: {
+                timeToCreateRock = 10000;
+                spaceShip.timeShutting = -999999999;
+                for (int n = 0; n < 7; n++) {
+                    newRock(rockImage);
+
+                }
+                break;
+            }
+            // create rcck for shutting game
+            case 2: {
+                timeToCreateRock = 100;
+                for (int n = 0; n < 25; n++) {
+                    newRock(rockImage);
+                }
+                break;
+            }
+            // create the rock for level game
+
         }
 
 
@@ -163,48 +225,75 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
     }
 
 
-    public void update()
-    {
+    public void update() {
         spaceShip.update();
         bg.update();
         // This is using for update the bullet
         // counting time delay for shoot
 
-        long elapsed = (System.nanoTime() - bulletStartTime)/1000000;
-        if(shoot && elapsed > timeDelayShoot){
+        long elapsed = (System.nanoTime() - bulletStartTime) / 1000000;
+        if (shoot && elapsed > (timeDelayShoot - spaceShip.timeShutting)) {
 //
-            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.bullet),spaceShip.rect.centerX()-9,spaceShip.rect.top-spaceShip.height+10,-40, 0));
-            bulletStartTime = System.nanoTime();
+            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.bullet), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
             countBullets += 1;
+            if (spaceShip.enableBullet2) {
+                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.bullet), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
+                countBullets += 1;
+            }
+            if (spaceShip.enableBullet3) {
+                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.bullet), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
+                countBullets += 1;
+            }
+
+            bulletStartTime = System.nanoTime();
+
 
         }
 
-        for (Enumeration e = dictionaryBullets.keys(); e.hasMoreElements();) {
+        for (Enumeration e = dictionaryBullets.keys(); e.hasMoreElements(); ) {
             Object object = e.nextElement();
             delete = false;
-            for(int n = 0; n < rocks.size(); n++) {
+            for (int n = 0; n < rocks.size(); n++) {
 
                 if (collision(rocks.get(n), dictionaryBullets.get(object))) {
-                    spaceShip.score += rocks.get(n).width;
-                    explosions.add(new Explosion(explosionImageRSmall,rocks.get(n).rectangle.centerX(),rocks.get(n).rectangle.centerY()));
+                    if (!gameOver) {
+                        spaceShip.score += rocks.get(n).width;
+                    }
+                    explosions.add(new Explosion(explosionImageRSmall, rocks.get(n).rectangle.centerX(), rocks.get(n).rectangle.centerY()));
                     delete = true;
                     dictionaryBullets.remove(object);
                     rocks.remove(n);
+                    switch (ConstantUtil.STYLE) {
 
-                    newRock(rockImage);
+                        case 1: {
+
+                            if (rocks.size() < 25) {
+                                newRock(rockImage);
+                            }
+                            break;
+                        }
+                        case 2: {
+                            if (rocks.size() < 150) {
+                                newRock(rockImage);
+                            }
+                            break;
+
+                        }
+
+
+                    }
                     break;
                 }
             }
 
-            if(!delete){
+            if (!delete) {
 
 
-            if(dictionaryBullets.get(object).y<-100 ){
-               dictionaryBullets.remove(object);
+                if (dictionaryBullets.get(object).y < -100) {
+                    dictionaryBullets.remove(object);
 
 
-            }
-            else{
+                } else {
 
                     dictionaryBullets.get(object).update();
                 }
@@ -214,21 +303,44 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
         }
 
 
-
-        for(int i = 0; i < rocks.size(); i++){
+        for (int i = 0; i < rocks.size(); i++) {
             rocks.get(i).update();
             // check the collision between rocks and the ship it work but a bit lag
-            if(collision(rocks.get(i), spaceShip)){
-                spaceShip.health -= rocks.get(i).width/2;
-                if (spaceShip.health<0) {
-                    explosions.add(new Explosion(explosionImageSonicSmall,spaceShip.x-60,spaceShip.rect.top-90));
-                    spaceShip.health =0;
+            if (collision(rocks.get(i), spaceShip)) {
+                spaceShip.health -= rocks.get(i).width / 2;
+                if (spaceShip.health < 0) {
+                    explosions.add(new Explosion(explosionImageSonicSmall, spaceShip.x - 60, spaceShip.rect.top - 90));
+                    spaceShip.health = 0;
                     spaceShip.moving(false);
-                spaceShip.setY(-500);}
-                spaceShip.score += rocks.get(i).width;
-                explosions.add(new Explosion(explosionImageRSmall,rocks.get(i).rectangle.centerX(),rocks.get(i).rectangle.centerY()));
+                    spaceShip.setY(-500);
+                    gameOver = true;
+
+
+                }
+                if (!gameOver) {
+                    spaceShip.score += rocks.get(i).width;
+                }
+                explosions.add(new Explosion(explosionImageRSmall, rocks.get(i).rectangle.centerX(), rocks.get(i).rectangle.centerY()));
                 rocks.remove(i);
-                newRock(rockImage);
+                switch (ConstantUtil.STYLE) {
+
+                    case 1: {
+
+                        if (rocks.size() < 25) {
+                            newRock(rockImage);
+                        }
+                        break;
+                    }
+                    case 2: {
+                        if (rocks.size() < 150) {
+                            newRock(rockImage);
+                        }
+                        break;
+
+                    }
+
+
+                }
 //                layer.setPlaying(false);
 
 
@@ -239,114 +351,437 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback
 //                    rocks.remove(i);}}
 //
         }
-        for(int i = 0; i < explosions.size(); i++) {
+        for (int i = 0; i < explosions.size(); i++) {
             explosions.get(i).update();
-            if (explosions.get(i).remove){
+            if (explosions.get(i).remove) {
                 explosions.remove(i);
             }
         }
+
+        //Increase the number of rock
+        switch (ConstantUtil.STYLE) {
+
+            case 1: {
+                long elapsedTime = (System.nanoTime() - timeCount) / 1000000;
+                if (elapsedTime > timeToCreateRock && rocks.size() < 25) {
+                    newRock(rockImage);
+                    timeCount = System.nanoTime();
+                }
+                break;
+            }
+            case 2: {
+                long elapsedTime = (System.nanoTime() - timeCount) / 1000000;
+                if (elapsedTime > timeToCreateRock && rocks.size() < 150) {
+                    newRock(rockImage);
+                    timeCount = System.nanoTime();
+                }
+                break;
+
+            }
+
+
+        }
+        if (gameOver) {
+            for (int i = 0; i < rocks.size(); i++) {
+                rocks.remove(i);
+            }
+        }
+
     }
+
     // collision function. that check the collision between 2 object of GameObject
-    public boolean collision(GameObject a, GameObject b){
-        if(Rect.intersects(a.getRectangle(), b.getRectangle())){
+    public boolean collision(GameObject a, GameObject b) {
+        if (Rect.intersects(a.getRectangle(), b.getRectangle())) {
             return true;
         }
-        return  false;
+        return false;
     }
+
     @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {//
-        if(event.getAction() == MotionEvent.ACTION_DOWN){
-            int x = (int)(event.getRawX()/copyscaleFactorX);
-            int y = (int)(event.getRawY()/copyscaleFactorY);
+    public boolean onTouchEvent(MotionEvent event) {//
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            int x = (int) (event.getRawX() / copyscaleFactorX);
+            int y = (int) (event.getRawY() / copyscaleFactorY);
             shoot(true);
-            if (spaceShip.rectFortouch.contains(x,y)){
-                spaceShip.setXY(x,y);
+            if (spaceShip.rectFortouch.contains(x, y)) {
+                spaceShip.setXY(x, y);
                 spaceShip.moving(true);
+            }
+            // retry the game
+            if (gameOver && rectTryagain.contains(x, y) && rocks.size() == 0) {
+
+                level = 0;
+                spaceShip.timeChange = 0;
+                spaceShip.scoreForStyleOne = 0;
+                spaceShip.score = 0;
+                spaceShip.x = WIDTH / 2;
+                spaceShip.y = HEIGHT - spaceShip.height - 200;
+                spaceShip.health = 100;
+                gameOver = false;
+                switch (ConstantUtil.STYLE) {
+                    //create rock for avoid Rock game
+                    case 1: {
+                        timeToCreateRock = 10000;
+                        spaceShip.timeShutting = -999999999;
+                        for (int n = 0; n < 7; n++) {
+                            newRock(rockImage);
+
+                        }
+                        break;
+                    }
+                    // create rcck for shutting game
+                    case 2: {
+                        timeToCreateRock = 100;
+                        for (int n = 0; n < 25; n++) {
+                            newRock(rockImage);
+                        }
+                        break;
+                    }
+
+                    // create the rock for level game
+
+                }
+
+
             }
 
             return true;
         }
-        if(event.getAction() == MotionEvent.ACTION_MOVE && spaceShip.move){
-            int x = (int)(event.getRawX()/copyscaleFactorX);
-            int y = (int)(event.getRawY()/copyscaleFactorY);
-            if(x+spaceShip.width > WIDTH){
-                x = WIDTH-spaceShip.width;
+        if (event.getAction() == MotionEvent.ACTION_MOVE && spaceShip.move) {
+            int x = (int) (event.getRawX() / copyscaleFactorX);
+            int y = (int) (event.getRawY() / copyscaleFactorY);
+            if (x + spaceShip.width > WIDTH) {
+                x = WIDTH - spaceShip.width;
             }
-            if(y > HEIGHT -spaceShip.height){
-                y = HEIGHT -spaceShip.height;
+            if (y > HEIGHT - spaceShip.height) {
+                y = HEIGHT - spaceShip.height;
             }
-            if(spaceShip.rectFortouch.contains(x,y)){
+            if (spaceShip.rectFortouch.contains(x, y)) {
                 spaceShip.moving(true);
             }
-            spaceShip.setXY(x,y);
+            spaceShip.setXY(x, y);
             return true;
         }
-        if(event.getAction() == MotionEvent.ACTION_UP){
+        if (event.getAction() == MotionEvent.ACTION_UP) {
             shoot(false);
             spaceShip.moving(false);
-            return  true;
+            return true;
         }
         return super.onTouchEvent(event);
     }
-    public void drawText(Canvas canvas, int shipHealth){
+
+    public void drawText(Canvas canvas, int shipHealth) {
         Paint paint = new Paint();
 
-        float green  = (shipHealth*1.f/100*1.f)*225;
-        float red  = (1-(shipHealth*1.f/100*1.f))*225 ;
-        int barLength = (int)  ((shipHealth*1.f/100*1.f)*200);
+        float green = (shipHealth * 1.f / 100 * 1.f) * 225;
+        float red = (1 - (shipHealth * 1.f / 100 * 1.f)) * 225;
+        int barLength = (int) ((shipHealth * 1.f / 100 * 1.f) * 200);
 //        if (green < 0) green =0;
 //        if (red > 225) red =225;
 //        if (barLength < 0) barLength =0;
 
-        paint.setColor(Color.rgb((int) red,(int) green,0));
+        paint.setColor(Color.rgb((int) red, (int) green, 0));
         Paint paint1 = new Paint();
         paint1.setColor(Color.WHITE);
         paint1.setTextSize(40);
         paint1.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        canvas.drawText(""+spaceShip.score, WIDTH/2-50, 40, paint1);
+        if (!gameOver) {
+            if (ConstantUtil.STYLE == 1) {
+                scoregame1 = spaceShip.scoreForStyleOne;
+                canvas.drawText("" + spaceShip.scoreForStyleOne, WIDTH / 2 - 50, 40, paint1);
+            } else if (ConstantUtil.STYLE == 2) {
+                scoregame2 = spaceShip.score;
+                canvas.drawText("" + spaceShip.score, WIDTH / 2 - 50, 40, paint1);
+            } else {
+                scoregame3 = spaceShip.score;
+                canvas.drawText("" + spaceShip.score, WIDTH / 2 - 50, 40, paint1);
+            }
+        }
+
+
+        Paint paint2 = new Paint();
+        paint2.setColor(Color.WHITE);
+        paint2.setTextSize(120);
+        paint2.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
 
         int barHeight = 10;
-        float fill = (shipHealth*1.f/100*1.f)* (barLength*1.f);
-        Rect barHealth = new Rect(5, 5,5+ barLength, barHeight);
-
+        float fill = (shipHealth * 1.f / 100 * 1.f) * (barLength * 1.f);
+        Rect barHealth = new Rect(5, 5, 5 + barLength, barHeight);
 
         canvas.drawRect(barHealth, paint);
-        canvas.drawLine(5, 4, 5+ 200+1, 4,paint);
-        canvas.drawLine(5, barHeight, 5+ 200+1, barHeight,paint);
-        canvas.drawLine(5, 4, 5, barHeight,paint);
-        canvas.drawLine(5+ 200+1, barHeight, 5+ 200+1, 4,paint);
+        canvas.drawLine(5, 4, 5 + 200 + 1, 4, paint);
+        canvas.drawLine(5, barHeight, 5 + 200 + 1, barHeight, paint);
+        canvas.drawLine(5, 4, 5, barHeight, paint);
+        canvas.drawLine(5 + 200 + 1, barHeight, 5 + 200 + 1, 4, paint);
+        // create GameOver box
+        if (gameOver) {
+            game.loadData();
+
+            game.updateData();
+//            System.out.println("highScoregame1;" +highScoregame1);
+//            System.out.println("highScoregame2;" +highScoregame2);
+//            System.out.println("highScoregame3;" +highScoregame3);
+            canvas.drawBitmap(gameover, WIDTH / 2 - 280, HEIGHT / 2 - 400, null);
+            canvas.drawBitmap(highscore, WIDTH / 2 - 250, HEIGHT / 2, null);
+            canvas.drawBitmap(tryagain, WIDTH / 2 - 250, HEIGHT / 2 + 300, null);
+            rectTryagain = new Rect(WIDTH / 2 - 250, HEIGHT / 2 + 300, WIDTH / 2 - 250 + tryagain.getWidth(), HEIGHT / 2 + 300 + tryagain.getHeight());
+
+            if (ConstantUtil.STYLE == 1) {
+                if (spaceShip.scoreForStyleOne > highScoregame1) {
+                    highScoregame1 = spaceShip.scoreForStyleOne;
+//                    System.out.println("highScoregame1saved;" +highScoregame1);
+                    game.saveData(1);
+                }
+                canvas.drawText("" + highScoregame1, WIDTH / 2 - 230, HEIGHT / 2 + 200, paint2);
+                canvas.drawText("" + spaceShip.scoreForStyleOne, WIDTH / 2 - 230, HEIGHT / 2 - 100, paint2);
+
+            } else if (ConstantUtil.STYLE == 2) {
+                if (spaceShip.score > highScoregame2) {
+                    highScoregame2 = spaceShip.score;
+                    game.saveData(2);
+                }
+                canvas.drawText("" + highScoregame2, WIDTH / 2 - 230, HEIGHT / 2 + 200, paint2);
+                canvas.drawText("" + spaceShip.score, WIDTH / 2 - 250, HEIGHT / 2 - 100, paint2);
+            } else {
+                if (spaceShip.score > highScoregame3) {
+                    highScoregame3 = spaceShip.score;
+                    game.saveData(3);
+                }
+                canvas.drawText("" + highScoregame3, WIDTH / 2 - 230, HEIGHT / 2 + 200, paint2);
+                canvas.drawText("" + spaceShip.score, WIDTH / 2 - 250, HEIGHT / 2 - 100, paint2);
+            }
+
+            //canvas.drawRect(rectTryagain,paint1);
+        }
 
 
+        // 10 levels for game style 3
+        if (ConstantUtil.STYLE == 3) {
+            if (rocks.size() == 0 && !gameOver) {
+                switch (level) {
+                    case 0: {
+                        if (firstTime == 1) {
+                            delayBeforeStartLevel = System.nanoTime();
+                            firstTime += 1;
+                        }
+                        long resetLevel = (System.nanoTime() - delayBeforeStartLevel) / 1000000;
+                        if (resetLevel > 2500) {
+                            for (int n = 0; n < 100; n++) {
+                                newRock(rockImage);
+                            }
+                            level += 1;
+                            firstTime = 1;
+                        } else {
+                            canvas.drawText("Level " + (level + 1), WIDTH / 2 - 175, HEIGHT / 2, paint2);
+                        }
+                        break;
+                    }
+                    //create rock for avoid Rock game
+                    case 1: {
+                        if (firstTime == 1) {
+                            delayBeforeStartLevel = System.nanoTime();
+                            firstTime += 1;
+                        }
+                        long resetLevel = (System.nanoTime() - delayBeforeStartLevel) / 1000000;
+                        if (resetLevel > 2500) {
+                            for (int n = 0; n < 200; n++) {
+                                newRock(rockImage);
+                            }
+                            level += 1;
+                            firstTime = 1;
+                        } else {
+                            canvas.drawText("Level " + (level + 1), WIDTH / 2 - 175, HEIGHT / 2, paint2);
+                        }
+                        break;
+                    }
+                    // create rcck for shutting game
+                    case 2: {
+                        if (firstTime == 1) {
+                            delayBeforeStartLevel = System.nanoTime();
+                            firstTime += 1;
+                        }
+                        long resetLevel = (System.nanoTime() - delayBeforeStartLevel) / 1000000;
+                        if (resetLevel > 2500) {
+                            for (int n = 0; n < 300; n++) {
+                                newRock(rockImage);
+                            }
+                            level += 1;
+                            firstTime = 1;
+                        } else {
+                            canvas.drawText("Level " + (level + 1), WIDTH / 2 - 175, HEIGHT / 2, paint2);
+                        }
+                        break;
+                    }
+                    // create the rock for level game
+                    case 3: {
+                        if (firstTime == 1) {
+                            delayBeforeStartLevel = System.nanoTime();
+                            firstTime += 1;
+                        }
+                        long resetLevel = (System.nanoTime() - delayBeforeStartLevel) / 1000000;
+                        if (resetLevel > 2500) {
+                            for (int n = 0; n < 400; n++) {
+                                newRock(rockImage);
+                            }
+                            level += 1;
+                            firstTime = 1;
+                        } else {
+                            canvas.drawText("Level " + (level + 1), WIDTH / 2 - 175, HEIGHT / 2, paint2);
+                        }
+                        break;
+                    }
+                    case 4: {
+                        if (firstTime == 1) {
+                            delayBeforeStartLevel = System.nanoTime();
+                            firstTime += 1;
+                        }
+                        long resetLevel = (System.nanoTime() - delayBeforeStartLevel) / 1000000;
+                        if (resetLevel > 2500) {
+                            for (int n = 0; n < 500; n++) {
+                                newRock(rockImage);
+                            }
+                            level += 1;
+                            firstTime = 1;
+                        } else {
+                            canvas.drawText("Level " + (level + 1), WIDTH / 2 - 175, HEIGHT / 2, paint2);
+                        }
+                        break;
+                    }
+                    case 5: {
+                        if (firstTime == 1) {
+                            delayBeforeStartLevel = System.nanoTime();
+                            firstTime += 1;
+                        }
+                        long resetLevel = (System.nanoTime() - delayBeforeStartLevel) / 1000000;
+                        if (resetLevel > 2500) {
+                            for (int n = 0; n < 600; n++) {
+                                newRock(rockImage);
+                            }
+                            level += 1;
+                            firstTime = 1;
+                        } else {
+                            canvas.drawText("Level " + (level + 1), WIDTH / 2 - 175, HEIGHT / 2, paint2);
+                        }
+                        break;
+                    }
+                    case 6: {
+                        if (firstTime == 1) {
+                            delayBeforeStartLevel = System.nanoTime();
+                            firstTime += 1;
+                        }
+                        long resetLevel = (System.nanoTime() - delayBeforeStartLevel) / 1000000;
+                        if (resetLevel > 2500) {
+                            for (int n = 0; n < 700; n++) {
+                                newRock(rockImage);
+                            }
+                            level += 1;
+                            firstTime = 1;
+                        } else {
+                            canvas.drawText("Level " + (level + 1), WIDTH / 2 - 175, HEIGHT / 2, paint2);
+                        }
+                        break;
+                    }
+                    case 7: {
+                        if (firstTime == 1) {
+                            delayBeforeStartLevel = System.nanoTime();
+                            firstTime += 1;
+                        }
+                        long resetLevel = (System.nanoTime() - delayBeforeStartLevel) / 1000000;
+                        if (resetLevel > 2500) {
+                            for (int n = 0; n < 800; n++) {
+                                newRock(rockImage);
+                            }
+                            level += 1;
+                            firstTime = 1;
+                        } else {
+                            canvas.drawText("Level " + (level + 1), WIDTH / 2 - 175, HEIGHT / 2, paint2);
+                        }
+                        break;
+                    }
+                    case 8: {
+                        if (firstTime == 1) {
+                            delayBeforeStartLevel = System.nanoTime();
+                            firstTime += 1;
+                        }
+                        long resetLevel = (System.nanoTime() - delayBeforeStartLevel) / 1000000;
+                        if (resetLevel > 2500) {
+                            for (int n = 0; n < 900; n++) {
+                                newRock(rockImage);
+                            }
+                            level += 1;
+                            firstTime = 1;
+                        } else {
+                            canvas.drawText("Level " + (level + 1), WIDTH / 2 - 175, HEIGHT / 2, paint2);
+                        }
+                        break;
+                    }
+                    case 9: {
+                        if (firstTime == 1) {
+                            delayBeforeStartLevel = System.nanoTime();
+                            firstTime += 1;
+                        }
+                        long resetLevel = (System.nanoTime() - delayBeforeStartLevel) / 1000000;
+                        if (resetLevel > 2500) {
+                            for (int n = 0; n < 1000; n++) {
+                                newRock(rockImage);
+                            }
+                            level += 1;
+                            firstTime = 1;
+                        } else {
+                            canvas.drawText("Level " + (level + 1), WIDTH / 2 - 175, HEIGHT / 2, paint2);
+                        }
+                        break;
+                    }
+                    case 10: {
+                        if (firstTime == 1) {
+                            delayBeforeStartLevel = System.nanoTime();
+                            firstTime += 1;
+                        }
+                        long resetLevel = (System.nanoTime() - delayBeforeStartLevel) / 1000000;
+                        if (resetLevel > 2500) {
+                            for (int n = 0; n < 1500; n++) {
+                                newRock(rockImage);
+                            }
+                            level += 1;
+                            firstTime = 1;
+                        } else {
+                            canvas.drawText("Level " + (level + 1), WIDTH / 2 - 175, HEIGHT / 2, paint2);
 
+                        }
+                        break;
+                    }
+
+                }
+            }
+
+        }
     }
 
     @Override
-    public void draw(Canvas canvas)
-    {
+    public void draw(Canvas canvas) {
         super.draw(canvas);
-        final float scaleFactorX = getWidth()/(WIDTH*1.f);
-        final float scaleFactorY = getHeight()/(HEIGHT*1.f);
+        final float scaleFactorX = getWidth() / (WIDTH * 1.f);
+        final float scaleFactorY = getHeight() / (HEIGHT * 1.f);
 //        System.out.println(getWidth());
 //        System.out.println(getHeight());
 //        System.out.println(scaleFactorX);
 //        System.out.println(scaleFactorY);
 //
-        if(canvas!=null) {
+        if (canvas != null) {
             final int savedState = canvas.save();
             canvas.scale(scaleFactorX, scaleFactorY);
             bg.draw(canvas);
             spaceShip.draw(canvas);
-            for (Enumeration e = dictionaryBullets.keys(); e.hasMoreElements();) {
+            for (Enumeration e = dictionaryBullets.keys(); e.hasMoreElements(); ) {
                 dictionaryBullets.get(e.nextElement()).draw(canvas);
             }
 
             // update rock
-            for(Rock r:rocks){
+            for (Rock r : rocks) {
                 r.draw(canvas);
             }
-            for(Explosion e:explosions){
+            for (Explosion e : explosions) {
                 e.draw(canvas);
             }
             drawText(canvas, spaceShip.health);

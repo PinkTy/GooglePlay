@@ -16,12 +16,12 @@ public class Rock extends GameObject {
     public long lastupdate;
     public long timenow;
     public int rot, rotspeed;
-
+    int timeChange;
     public Rect rectangle;
     private  int score =30;
     int speedX;
     int speedY;
-    public Rock(Bitmap res){
+    public Rock(Bitmap res, int timechange){
         spritessheet = res;
         this.width = spritessheet.getWidth();
         this.height = spritessheet.getHeight();
@@ -29,7 +29,8 @@ public class Rock extends GameObject {
         this.y = -300 + rand.nextInt(100);
         rectangle = getRectangle();
         speedX = -5 + rand.nextInt(15 - 5 + 1);
-        speedY =  7 + rand.nextInt(30 + 1);
+        this.timeChange = (int)timechange/30;
+        speedY =  9+ rand.nextInt(20) + (int) (rand.nextDouble() * timeChange );
         if(speedY > 100){
             speedY = 100;
         }
@@ -62,14 +63,19 @@ public class Rock extends GameObject {
 
 // update and reset the rock if it out of screen
     public void update(){
+       // System.out.println(speedY);
         x += speedX;
         y += speedY;
+        if (!GamePanel.gameOver){
         if(y > GamePanel.HEIGHT + 200 || rectangle.left < - 200 || rectangle.left > GamePanel.WIDTH + 25){
             this.x = 0 + rand.nextInt(GamePanel.WIDTH + 1);
             this.y = -150 + rand.nextInt(100);
             speedX = -5 + rand.nextInt(15 - 5 + 1);
-            speedY =  7 + rand.nextInt(30 + 1);
-        }
+            speedY =  9+ rand.nextInt(20) + (int) (rand.nextDouble() * timeChange );
+            if(speedY > 100){
+                speedY = 100;
+            }
+        }}
 //        rotate();
         rectangle = getRectangle();
 

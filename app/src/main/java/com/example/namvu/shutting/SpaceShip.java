@@ -16,10 +16,15 @@ public class SpaceShip extends GameObject {
 
     //    private int score;
     //    private double dya;
+    public int timeShutting = 200;
     public int health = 100;
+    public int timeChange = 0;
+    public int scoreForStyleOne = 0;
     public int score = 0;
     private int X;
     private int Y;
+    public boolean enableBullet2 = true ;
+    public boolean enableBullet3 = true;
     public boolean move;
     private boolean up;
     private boolean down;
@@ -30,6 +35,7 @@ public class SpaceShip extends GameObject {
     public Rect rectFortouch;
     //    private Animation animation = new Animation();
     private long startTime;
+    private long startTime2;
     public SpaceShip(Bitmap res, Bitmap shield){
         //System.out.println(GamePanel.WIDTH);
 
@@ -43,7 +49,7 @@ public class SpaceShip extends GameObject {
         System.out.print("height: "+ height);
         System.out.print(" width: "+ width);
         x = GamePanel.WIDTH/2;
-        y = GamePanel.HEIGHT-height;
+        y = GamePanel.HEIGHT-height-200;
         spritessheet = res;
         this.shield = shield;
 //        this.shield = Bitmap.createScaledBitmap(this.shield,2,3,true);
@@ -56,6 +62,7 @@ public class SpaceShip extends GameObject {
 //        animation.setDelay(10);
 //        animation.setFrames(image);
         startTime = System.nanoTime();
+        startTime2 = System.nanoTime();
         rect = getRectangle();
         rectFortouch = getRectangleTouch();
 
@@ -98,6 +105,22 @@ public class SpaceShip extends GameObject {
 
 
     public void update(){
+        long elapsed = (System.nanoTime()-startTime)/1000000;
+        long elapsed1 = (System.nanoTime()-startTime2)/1000000;
+        if(elapsed>1000)
+        {
+            //System.out.print("timechange" + timeChange);
+            timeChange++;
+            startTime = System.nanoTime();
+        }
+
+        if(elapsed1>100 && !GamePanel.gameOver)
+        {
+            //System.out.print("timechange" + timeChange);
+            scoreForStyleOne++;
+            startTime2 = System.nanoTime();
+        }
+
 
         if(move){
             x = X;

@@ -3,6 +3,7 @@ package com.example.namvu.shutting;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,11 @@ public class Game extends Activity {
     private GameSoundPool sounds;
     private menu Menu;
     private GamePanel mainGame;
+    public static final String SHARED_PREFS = "Game_data1";
+    public static final String SCORE_STYLEONE = "Score_1";
+    public static final String SCORE_STYLETWO = "Score_2";
+    public static final String SCORE_STYLETHREE = "Score_3";
+    public static int scoreGame1, scoreGame2, scoreGame3;
 
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
@@ -35,6 +41,33 @@ public class Game extends Activity {
         //setContentView(new GamePanel(this, sounds));
     }
     private long firstTime = 0;
+    public void saveData(int GameSave){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        switch (GameSave){
+            case 1:
+                editor.putInt(SCORE_STYLEONE, GamePanel.scoregame1);
+                break;
+            case 2:
+                editor.putInt(SCORE_STYLETWO,GamePanel.scoregame2);
+                break;
+            case 3:
+                editor.putInt(SCORE_STYLETHREE,GamePanel.scoregame3);
+                break;
+        }
+        editor.apply();
+    }
+    public void loadData(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        scoreGame1 = sharedPreferences.getInt(SCORE_STYLEONE,0);
+        scoreGame2 = sharedPreferences.getInt(SCORE_STYLETWO,0);
+        scoreGame3 = sharedPreferences.getInt(SCORE_STYLETHREE,0);
+    }
+    public void updateData(){
+        GamePanel.highScoregame1 = scoreGame1;
+        GamePanel.highScoregame2 = scoreGame2;
+        GamePanel.highScoregame3 = scoreGame3;
+    }
 
     public void toMainGame() {
         if (mainGame == null) {
