@@ -138,7 +138,73 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
         HEIGHT = bg.image.getHeight();
         copyscaleFactorY = getHeight() / (HEIGHT * 1.f);
         copyscaleFactorX = getWidth() / (WIDTH * 1.f);
-        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.spaceship), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+        switch (ConstantUtil.SPACESHIP_STYLE){
+            case 1:
+                switch (ConstantUtil.SHIP_COlOR){
+                    case 1:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership1blue), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                    case 2:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership1red), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                    case 3:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership1green), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                    case 4:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership1orange), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                }
+                break;
+            case 2:
+                switch (ConstantUtil.SHIP_COlOR){
+                    case 1:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership2blue), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                    case 2:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership2red), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                    case 3:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership2green), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                    case 4:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership2orange), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                }
+                break;
+            case 3:
+                switch (ConstantUtil.SHIP_COlOR){
+                    case 1:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.spaceship), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                    case 2:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership3red), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                    case 3:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership3green), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                    case 4:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership3orange), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                }
+                break;
+            case 4:
+                switch (ConstantUtil.SHIP_COlOR){
+                    case 1:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.ufoblue), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                    case 2:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.ufored), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                    case 3:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.ufogreen), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                    case 4:
+                        spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.ufoyellow), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                        break;
+                }
+                break;
+
+        }
         bulletStartTime = System.nanoTime();
         // load bitmap of gameover
         gameover = BitmapFactory.decodeResource(getResources(), R.drawable.gameover);
@@ -233,17 +299,222 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
 
         long elapsed = (System.nanoTime() - bulletStartTime) / 1000000;
         if (shoot && elapsed > (timeDelayShoot - spaceShip.timeShutting)) {
-//
-            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.bullet), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
-            countBullets += 1;
-            if (spaceShip.enableBullet2) {
-                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.bullet), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
-                countBullets += 1;
+            switch (ConstantUtil.BULLET_STYLE){
+                case 1:
+                    switch (ConstantUtil.BULLET_COlOR){
+                        case 1:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                        case 2:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+
+                            case 3:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                        case 4:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                    }
+                    break;
+                case 2:
+                    switch (ConstantUtil.BULLET_COlOR){
+                        case 1:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                            case 2:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                        case 3:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+
+                        case 4:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                    }
+
+                    break;
+                case 3:
+                    switch (ConstantUtil.BULLET_COlOR) {
+                        case 1:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                        case 2:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                        case 3:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                        case 4:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                    }
+
+                case 4:
+                    switch (ConstantUtil.BULLET_COlOR) {
+                        case 1:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                        case 2:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                        case 3:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+                        case 4:
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, 0));
+                            countBullets += 1;
+                            if (spaceShip.enableBullet2) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, 30));
+                                countBullets += 1;
+                            }
+                            if (spaceShip.enableBullet3) {
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, -30));
+                                countBullets += 1;
+                            }
+                            break;
+
+                    }
+
+
             }
-            if (spaceShip.enableBullet3) {
-                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.bullet), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
-                countBullets += 1;
-            }
+
 
             bulletStartTime = System.nanoTime();
 
@@ -526,6 +797,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
             canvas.drawBitmap(highscore, WIDTH / 2 - 250, HEIGHT / 2, null);
             canvas.drawBitmap(tryagain, WIDTH / 2 - 250, HEIGHT / 2 + 300, null);
             rectTryagain = new Rect(WIDTH / 2 - 250, HEIGHT / 2 + 300, WIDTH / 2 - 250 + tryagain.getWidth(), HEIGHT / 2 + 300 + tryagain.getHeight());
+//            canvas.drawRect(rectTryagain, );
 
             if (ConstantUtil.STYLE == 1) {
                 if (spaceShip.scoreForStyleOne > highScoregame1) {

@@ -16,7 +16,7 @@ public class SpaceShip extends GameObject {
 
     //    private int score;
     //    private double dya;
-    public int timeShutting = 200;
+    public int timeShutting = 0;
     public int health = 100;
     public int timeChange = 0;
     public int scoreForStyleOne = 0;
