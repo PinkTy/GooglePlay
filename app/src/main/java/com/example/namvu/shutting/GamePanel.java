@@ -34,7 +34,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
     Integer countBullets = 0;
 
     private Random rand = new Random();
-    public Rect rect, rectTryagain;
+    public Rect rect, rectTryagain, rectBack;
     private long timeCount;
     private long delayBeforeStartLevel;
     private int timeToCreateRock;
@@ -45,6 +45,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
     Bitmap[] explosionImageRSmall = new Bitmap[9];
     Bitmap[] explosionImageSonic = new Bitmap[9];
     Bitmap[] explosionImageSonicSmall = new Bitmap[9];
+    public static Bitmap[] NamSpaceShip = new Bitmap[16];
 
     public static int copySavestate;
     public static float copyscaleFactorX;
@@ -65,11 +66,13 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
     private long bulletStartTime;
     public long timeDelayShoot = 200;
     private SpaceShip spaceShip;
-    private Bitmap gameover, highscore, tryagain;
+    private Bitmap gameover, highscore, tryagain, back;
     public static ArrayList<Bullet> bullets = new ArrayList<Bullet>();
     public static ArrayList<Explosion> explosions = new ArrayList<Explosion>();
     public static ArrayList<Rock> rocks = new ArrayList<Rock>();
     private MediaPlayer mMediaPlayer;
+    private MediaPlayer backsound;
+    public Paint paint4;
 
     public GamePanel(Context context, GameSoundPool sounds) {
         super(context, sounds);
@@ -81,6 +84,8 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
         setFocusable(true);
 
         //music
+        backsound = MediaPlayer.create(game, R.raw.button);
+        backsound.setLooping(false);
         mMediaPlayer = MediaPlayer.create(game, R.raw.testmusic);
         mMediaPlayer.setLooping(true);
         if (!mMediaPlayer.isPlaying()) {
@@ -132,12 +137,14 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background));
         bg.setVector(5);
-        rect = new Rect(0, 0, WIDTH-20, HEIGHT);
+        back = BitmapFactory.decodeResource(getResources(), R.drawable.back);
         timeCount = System.nanoTime();
         WIDTH = bg.image.getWidth();
         HEIGHT = bg.image.getHeight();
+        rect = new Rect(0, 0, WIDTH-20, HEIGHT);
         copyscaleFactorY = getHeight() / (HEIGHT * 1.f);
         copyscaleFactorX = getWidth() / (WIDTH * 1.f);
+        paint.setTextSize(40);
         switch (ConstantUtil.SPACESHIP_STYLE){
             case 1:
                 switch (ConstantUtil.SHIP_COlOR){
@@ -203,6 +210,27 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                         break;
                 }
                 break;
+            case 5:
+                NamSpaceShip[0] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1blue);
+                NamSpaceShip[1] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1red);
+                NamSpaceShip[2] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1green);
+                NamSpaceShip[3] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1orange);
+                NamSpaceShip[4] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2blue);
+                NamSpaceShip[5] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2red);
+                NamSpaceShip[6] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2green);
+                NamSpaceShip[7] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2orange);
+                NamSpaceShip[8] =BitmapFactory.decodeResource(getResources(), R.drawable.spaceship);
+                NamSpaceShip[9] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3red);
+                NamSpaceShip[10] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3green);
+                NamSpaceShip[11] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3orange);
+                NamSpaceShip[12] =BitmapFactory.decodeResource(getResources(), R.drawable.ufoblue);
+                NamSpaceShip[13] =BitmapFactory.decodeResource(getResources(), R.drawable.ufored);
+                NamSpaceShip[14] =BitmapFactory.decodeResource(getResources(), R.drawable.ufogreen);
+                NamSpaceShip[15] =BitmapFactory.decodeResource(getResources(), R.drawable.ufoyellow);
+                spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.ufoyellow), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
+                break;
+
+
 
         }
         bulletStartTime = System.nanoTime();
@@ -286,8 +314,21 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
 
         //we can safely start the game loop
         thread.setRunning(true);
-        thread.start();
-
+        if (thread.isAlive()) {
+            thread.start();
+        } else {
+            thread = new MainThread(getHolder(), this);
+            thread.setRunning(true);
+            shoot = false;
+            level = 0;
+            gameOver = false;
+            thread.start();
+        }
+//        if (thread.getState() == Thread.State.NEW)
+//        {
+//            thread.setRunning(true);
+//            thread.start();
+//        }
     }
 
 
@@ -303,14 +344,14 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                 case 1:
                     switch (ConstantUtil.BULLET_COlOR){
                         case 1:
-                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
                             countBullets += 1;
                             if (spaceShip.enableBullet2) {
-                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
                                 countBullets += 1;
                             }
                             if (spaceShip.enableBullet3) {
-                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
                                 countBullets += 1;
                             }
                             break;
@@ -340,7 +381,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                             }
                             break;
                         case 4:
-                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
                             countBullets += 1;
                             if (spaceShip.enableBullet2) {
                                 dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
@@ -677,13 +718,20 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
             int x = (int) (event.getRawX() / copyscaleFactorX);
             int y = (int) (event.getRawY() / copyscaleFactorY);
             shoot(true);
-            if (spaceShip.rectFortouch.contains(x, y)) {
+            if (spaceShip.rectFortouch.contains(x, y) && !gameOver) {
                 spaceShip.setXY(x, y);
                 spaceShip.moving(true);
             }
+            // back
+            if (gameOver &&rectBack.contains(x, y)){
+                backsound.start();
+                thread.setRunning(false);
+                game.getHandler().sendEmptyMessage(ConstantUtil.TO_MENU_PANEL);
+
+            }
             // retry the game
             if (gameOver && rectTryagain.contains(x, y) && rocks.size() == 0) {
-
+                backsound.start();
                 level = 0;
                 spaceShip.timeChange = 0;
                 spaceShip.scoreForStyleOne = 0;
@@ -798,6 +846,8 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
 //            System.out.println("highScoregame3;" +highScoregame3);
             canvas.drawBitmap(gameover, WIDTH / 2 - 280, HEIGHT / 2 - 400, null);
             canvas.drawBitmap(highscore, WIDTH / 2 - 250, HEIGHT / 2, null);
+            canvas.drawBitmap(back, WIDTH / 2 - back.getWidth() / 2, HEIGHT / 2 + 500, paint4);
+            rectBack = new Rect(WIDTH / 2 - back.getWidth() / 2, HEIGHT / 2 + 500, WIDTH / 2 - back.getWidth() / 2 + back.getWidth(), HEIGHT / 2 + 500 + back.getHeight());
             canvas.drawBitmap(tryagain, WIDTH / 2 - 250, HEIGHT / 2 + 300, null);
             rectTryagain = new Rect(WIDTH / 2 - 250, HEIGHT / 2 + 300, WIDTH / 2 - 250 + tryagain.getWidth(), HEIGHT / 2 + 300 + tryagain.getHeight());
 //            canvas.drawRect(rectTryagain, );
@@ -827,7 +877,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                 canvas.drawText("" + spaceShip.score, WIDTH / 2 - 250, HEIGHT / 2 - 100, paint2);
             }
 
-            //canvas.drawRect(rectTryagain,paint1);
+//            canvas.drawRect(rectBack,paint1);
         }
 
 

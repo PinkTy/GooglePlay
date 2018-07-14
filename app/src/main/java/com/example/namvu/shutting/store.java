@@ -17,6 +17,8 @@ public class store extends BaseWindow {
     private Bitmap back;
     private Rect rect;
     private MediaPlayer mMediaPlayer;
+    private Bitmap[] bitmaps = new Bitmap[16];
+
 
     public store(Context context, GameSoundPool sounds) {
         super(context, sounds);
@@ -35,6 +37,22 @@ public class store extends BaseWindow {
     @Override
     public void surfaceCreated(SurfaceHolder arg0) {
         super.surfaceCreated(arg0);
+        bitmaps[0] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1blue);
+        bitmaps[1] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1red);
+        bitmaps[2] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1green);
+        bitmaps[3] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1orange);
+        bitmaps[4] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2blue);
+        bitmaps[5] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2red);
+        bitmaps[6] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2green);
+        bitmaps[7] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2orange);
+        bitmaps[8] =BitmapFactory.decodeResource(getResources(), R.drawable.spaceship);
+        bitmaps[9] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3red);
+        bitmaps[10] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3green);
+        bitmaps[11] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3orange);
+        bitmaps[12] =BitmapFactory.decodeResource(getResources(), R.drawable.ufoblue);
+        bitmaps[13] =BitmapFactory.decodeResource(getResources(), R.drawable.ufored);
+        bitmaps[14] =BitmapFactory.decodeResource(getResources(), R.drawable.ufogreen);
+        bitmaps[15] =BitmapFactory.decodeResource(getResources(), R.drawable.ufoyellow);
         initBitmap();
         if (thread.isAlive()) {
             thread.start();
@@ -79,10 +97,12 @@ public class store extends BaseWindow {
     @Override
     public void drawSelf() {
         try {
+
             canvas = sfh.lockCanvas();
             canvas.save();
             canvas.scale(scalex, scaley, 0, 0);
             canvas.drawBitmap(background, 0, 0, paint);
+            canvas.drawBitmap(bitmaps[0], 100, 100, paint);
             canvas.restore();
             canvas.drawBitmap(back, back_x, back_y, paint);
             canvas.restore();

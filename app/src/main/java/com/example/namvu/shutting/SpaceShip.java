@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.view.animation.Animation;
 
 
 public class SpaceShip extends GameObject {
@@ -31,6 +30,7 @@ public class SpaceShip extends GameObject {
     private boolean left;
     private boolean right;
     private boolean playing;
+    private Animation animation = new Animation();
     public Rect rect ;
     public Rect rectFortouch;
     //    private Animation animation = new Animation();
@@ -65,6 +65,10 @@ public class SpaceShip extends GameObject {
         startTime2 = System.nanoTime();
         rect = getRectangle();
         rectFortouch = getRectangleTouch();
+        if (ConstantUtil.SPACESHIP_STYLE == 5){
+            animation.setFrames(GamePanel.NamSpaceShip);
+            animation.setDelay(10);
+        }
 
 
     }
@@ -77,10 +81,15 @@ public class SpaceShip extends GameObject {
 //        Paint fillPaint1 = new Paint();
 //        fillPaint1.setColor(Color.YELLOW);
 //        canvas.drawRect(rectFortouch, fillPaint1);
-        Paint fillPaint = new Paint();
-        fillPaint.setColor(Color.RED);
-        canvas.drawRect(rect, fillPaint);
+//        Paint fillPaint = new Paint();
+//        fillPaint.setColor(Color.RED);
+//        canvas.drawRect(rect, fillPaint);
+        if (ConstantUtil.SPACESHIP_STYLE == 5){
+            canvas.drawBitmap(animation.getImage(),x,y,null);
+        }
+        else {
         canvas.drawBitmap(spritessheet, x,y, null);
+        }
         //add shield bitmap
         canvas.drawBitmap(shield, x-20,y-25, null);
     }
@@ -107,6 +116,7 @@ public class SpaceShip extends GameObject {
     public void update(){
         long elapsed = (System.nanoTime()-startTime)/1000000;
         long elapsed1 = (System.nanoTime()-startTime2)/1000000;
+        animation.update();
         if(elapsed>1000)
         {
             //System.out.print("timechange" + timeChange);

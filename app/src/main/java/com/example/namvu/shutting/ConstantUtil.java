@@ -7,16 +7,16 @@ public interface ConstantUtil  {
     int TO_MENU_PANEL = 4;
     int BULLET_STYLE = 1;
     //1 blue, 2 red, 3 green, 4 MIX
-    int BULLET_COlOR = 3;
+    int BULLET_COlOR = 4;
     //100000 at game style 3
 
 
 
 
     // 1 style 1, 2 style 2,3 style 3,4 style UFO
-    int SPACESHIP_STYLE = 1;
+    int SPACESHIP_STYLE = 5;
     //1 blue, 2 red, 3 green, 4 Yellow or Orange
-    int SHIP_COlOR = 2;
+    int SHIP_COlOR = 4;
 
 
 }
