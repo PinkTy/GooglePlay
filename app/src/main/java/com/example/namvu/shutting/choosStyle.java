@@ -155,9 +155,9 @@ public class choosStyle extends BaseWindow {
         scaley = screen_height / background.getHeight();
         blueCircle_x = screen_width / 4 - blueCircle.getWidth() + 50;
         blueCircle_y = screen_height / 2 - blueCircle.getHeight();
-        greenCircle_x = screen_width / 4 +  blueCircle.getWidth() - 20;
+        greenCircle_x = screen_width / 4 +  blueCircle.getWidth() - 40;
         greenCircle_y = blueCircle_y;
-        orangeCircle_x = greenCircle_x + 330;
+        orangeCircle_x =  screen_width / 2 +  blueCircle.getWidth();
         orangeCircle_y = blueCircle_y;
 
         explore_x = blueCircle_x - 5;

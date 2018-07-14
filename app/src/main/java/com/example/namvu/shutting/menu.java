@@ -22,13 +22,17 @@ public class menu extends BaseWindow{
     private float line1_y;
     private float frame_x;
     private float frame_y;
+    private float frame1_x;
+    private float frame1_y;
     private boolean isBtChange;
+    private boolean isBtChange2;
     private Bitmap newGame;
     private Bitmap line;
     private Bitmap line1;
     private Bitmap background;
     private Bitmap store;
     private Bitmap frame;
+    private Bitmap frame1;
     private Rect rect;
     private MediaPlayer mMediaPlayer;
 
@@ -77,6 +81,13 @@ public class menu extends BaseWindow{
                 drawSelf();
                 game.getHandler().sendEmptyMessage(ConstantUtil.TO_CHOOSE_PANEL);
             }
+            else if (x > button1_x && x < button1_x + store.getWidth()
+                    && y > button1_y && y < button1_y + store.getHeight()) {
+                mMediaPlayer.start();
+                isBtChange2 = true;
+                drawSelf();
+                game.getHandler().sendEmptyMessage(ConstantUtil.TO_STORE_PANEL);
+            }
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             float x = event.getX();
@@ -87,9 +98,16 @@ public class menu extends BaseWindow{
             } else {
                 isBtChange = false;
             }
+            if (x > button1_x && x < button1_x + store.getWidth()
+                    && y > button1_y && y < button1_y + store.getHeight()) {
+                isBtChange2 = true;
+            } else {
+                isBtChange2 = false;
+            }
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             isBtChange = false;
+            isBtChange2 = false;
             return true;
         }
         return false;
@@ -102,6 +120,7 @@ public class menu extends BaseWindow{
         line = BitmapFactory.decodeResource(getResources(), R.drawable.line);
         line1 = BitmapFactory.decodeResource(getResources(), R.drawable.line);
         frame = BitmapFactory.decodeResource(getResources(), R.drawable.blueframe);
+        frame1 =BitmapFactory.decodeResource(getResources(), R.drawable.blueframe);
         scalex = screen_width / background.getWidth();
         scaley = screen_height / background.getHeight();
 
@@ -115,6 +134,8 @@ public class menu extends BaseWindow{
         button1_y = button_y + 215;
         line1_x = line_x;
         line1_y = line_y + 215;
+        frame1_x = button1_x - 110;
+        frame1_y = button1_y - 15;
     }
 
     @Override
@@ -134,8 +155,15 @@ public class menu extends BaseWindow{
                 canvas.drawBitmap(newGame, button_x, button_y, paint);
                 canvas.drawBitmap(line, line_x, line_y, paint);
             }
-            canvas.drawBitmap(store, button1_x, button1_y, paint);
-            canvas.drawBitmap(line, line1_x, line1_y, paint);
+            if(isBtChange2){
+                canvas.drawBitmap(frame1, frame1_x, frame1_y, paint);
+                canvas.drawBitmap(store, button1_x, button1_y, paint);
+                canvas.drawBitmap(line1, line1_x, line1_y, paint);
+            }
+            else{
+                canvas.drawBitmap(store, button1_x, button1_y, paint);
+                canvas.drawBitmap(line1, line1_x, line1_y, paint);
+            }
             canvas.restore();
         } catch (Exception err) {
             err.printStackTrace();

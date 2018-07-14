@@ -17,6 +17,7 @@ public class Game extends Activity {
     private menu Menu;
     private GamePanel mainGame;
     private choosStyle choosePanel;
+    private store Store;
     public static final String SHARED_PREFS = "Game_data1";
     public static final String SCORE_STYLEONE = "Score_1";
     public static final String SCORE_STYLETWO = "Score_2";
@@ -32,6 +33,12 @@ public class Game extends Activity {
             }
             else if (msg.what == ConstantUtil.TO_CHOOSE_PANEL) {
                 toChooseView();
+            }
+            else if (msg.what == ConstantUtil.TO_STORE_PANEL) {
+                toStoreView();
+            }
+            else if (msg.what == ConstantUtil.TO_MENU_PANEL) {
+                toMenuView();
             }
         }
     };
@@ -83,6 +90,15 @@ public class Game extends Activity {
         Menu = null;
     }
 
+    public void toStoreView() {
+        if (Store == null) {
+            Store = new store(this, sounds);
+        }
+        setContentView(Store);
+        Menu = null;
+    }
+
+
     public void toChooseView() {
         if (choosePanel == null) {
             choosePanel = new choosStyle(this, sounds);
@@ -90,6 +106,16 @@ public class Game extends Activity {
         setContentView(choosePanel);
         Menu = null;
     }
+
+    public void toMenuView() {
+        if (Menu == null) {
+            Menu = new menu(this, sounds);
+        }
+        setContentView(Menu);
+        Store = null;
+    }
+
+
     public Handler getHandler() {
         return handler;
     }
