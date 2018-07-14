@@ -55,8 +55,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
     public static int highScoregame1;
     public static int highScoregame2;
     public static int highScoregame3;
-
-
+    public static int STYLE;
     public static int WIDTH;
     public static int HEIGHT;
     private boolean shoot, delete;
@@ -260,7 +259,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
         }
 
         // create 50 rocks at the start of the game
-        switch (ConstantUtil.STYLE) {
+        switch (STYLE) {
             //create rock for avoid Rock game
             case 1: {
                 timeToCreateRock = 10000;
@@ -303,14 +302,14 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                 case 1:
                     switch (ConstantUtil.BULLET_COlOR){
                         case 1:
-                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
                             countBullets += 1;
                             if (spaceShip.enableBullet2) {
-                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
                                 countBullets += 1;
                             }
                             if (spaceShip.enableBullet3) {
-                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
+                                dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, -30));
                                 countBullets += 1;
                             }
                             break;
@@ -340,7 +339,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                             }
                             break;
                         case 4:
-                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
+                            dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
                             countBullets += 1;
                             if (spaceShip.enableBullet2) {
                                 dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserred1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 30));
@@ -534,7 +533,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                     delete = true;
                     dictionaryBullets.remove(object);
                     rocks.remove(n);
-                    switch (ConstantUtil.STYLE) {
+                    switch (STYLE) {
 
                         case 1: {
 
@@ -593,7 +592,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                 }
                 explosions.add(new Explosion(explosionImageRSmall, rocks.get(i).rectangle.centerX(), rocks.get(i).rectangle.centerY()));
                 rocks.remove(i);
-                switch (ConstantUtil.STYLE) {
+                switch (STYLE) {
 
                     case 1: {
 
@@ -630,7 +629,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
         }
 
         //Increase the number of rock
-        switch (ConstantUtil.STYLE) {
+        switch (STYLE) {
 
             case 1: {
                 long elapsedTime = (System.nanoTime() - timeCount) / 1000000;
@@ -689,7 +688,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                 spaceShip.y = HEIGHT - spaceShip.height - 200;
                 spaceShip.health = 100;
                 gameOver = false;
-                switch (ConstantUtil.STYLE) {
+                switch (STYLE) {
                     //create rock for avoid Rock game
                     case 1: {
                         timeToCreateRock = 10000;
@@ -757,10 +756,10 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
         paint1.setTextSize(40);
         paint1.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         if (!gameOver) {
-            if (ConstantUtil.STYLE == 1) {
+            if (STYLE == 1) {
                 scoregame1 = spaceShip.scoreForStyleOne;
                 canvas.drawText("" + spaceShip.scoreForStyleOne, WIDTH / 2 - 50, 40, paint1);
-            } else if (ConstantUtil.STYLE == 2) {
+            } else if (STYLE == 2) {
                 scoregame2 = spaceShip.score;
                 canvas.drawText("" + spaceShip.score, WIDTH / 2 - 50, 40, paint1);
             } else {
@@ -799,7 +798,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
             rectTryagain = new Rect(WIDTH / 2 - 250, HEIGHT / 2 + 300, WIDTH / 2 - 250 + tryagain.getWidth(), HEIGHT / 2 + 300 + tryagain.getHeight());
 //            canvas.drawRect(rectTryagain, );
 
-            if (ConstantUtil.STYLE == 1) {
+            if (STYLE == 1) {
                 if (spaceShip.scoreForStyleOne > highScoregame1) {
                     highScoregame1 = spaceShip.scoreForStyleOne;
 //                    System.out.println("highScoregame1saved;" +highScoregame1);
@@ -808,7 +807,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                 canvas.drawText("" + highScoregame1, WIDTH / 2 - 230, HEIGHT / 2 + 200, paint2);
                 canvas.drawText("" + spaceShip.scoreForStyleOne, WIDTH / 2 - 230, HEIGHT / 2 - 100, paint2);
 
-            } else if (ConstantUtil.STYLE == 2) {
+            } else if (STYLE == 2) {
                 if (spaceShip.score > highScoregame2) {
                     highScoregame2 = spaceShip.score;
                     game.saveData(2);
@@ -829,7 +828,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
 
 
         // 10 levels for game style 3
-        if (ConstantUtil.STYLE == 3) {
+        if (STYLE == 3) {
             if (rocks.size() == 0 && !gameOver) {
                 switch (level) {
                     case 0: {

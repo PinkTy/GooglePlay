@@ -2,7 +2,8 @@ package com.example.namvu.shutting;
 
 public interface ConstantUtil  {
     int TO_GAME_PANEL = 1;
-    int STYLE = 3;
+    int TO_CHOOSE_PANEL = 2;
+
     int BULLET_STYLE = 1;
     //1 blue, 2 red, 3 green, 4 MIX
     int BULLET_COlOR = 3;

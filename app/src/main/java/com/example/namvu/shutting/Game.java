@@ -16,6 +16,7 @@ public class Game extends Activity {
     private GameSoundPool sounds;
     private menu Menu;
     private GamePanel mainGame;
+    private choosStyle choosePanel;
     public static final String SHARED_PREFS = "Game_data1";
     public static final String SCORE_STYLEONE = "Score_1";
     public static final String SCORE_STYLETWO = "Score_2";
@@ -29,6 +30,9 @@ public class Game extends Activity {
             if (msg.what == ConstantUtil.TO_GAME_PANEL) {
                 toMainGame();
             }
+            else if (msg.what == ConstantUtil.TO_CHOOSE_PANEL) {
+                toChooseView();
+            }
         }
     };
     @Override
@@ -38,6 +42,8 @@ public class Game extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Menu = new menu(this, sounds);
         setContentView(Menu);
+//        Menu = new menu(this, sounds);
+//        setContentView(Menu);
         //setContentView(new GamePanel(this, sounds));
     }
     private long firstTime = 0;
@@ -74,6 +80,14 @@ public class Game extends Activity {
             mainGame = new GamePanel(this, sounds);
         }
         setContentView(mainGame);
+        Menu = null;
+    }
+
+    public void toChooseView() {
+        if (choosePanel == null) {
+            choosePanel = new choosStyle(this, sounds);
+        }
+        setContentView(choosePanel);
         Menu = null;
     }
     public Handler getHandler() {
