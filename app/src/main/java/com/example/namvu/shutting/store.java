@@ -15,9 +15,11 @@ public class store extends BaseWindow {
     private float back_y;
     private Bitmap background;
     private Bitmap back;
+    private float proportion_X, proportion_Y;
     private Rect rect;
     private MediaPlayer mMediaPlayer;
     private Bitmap[] bitmaps = new Bitmap[16];
+    private Bitmap[] bullets = new Bitmap[16];
 
 
     public store(Context context, GameSoundPool sounds) {
@@ -37,6 +39,8 @@ public class store extends BaseWindow {
     @Override
     public void surfaceCreated(SurfaceHolder arg0) {
         super.surfaceCreated(arg0);
+
+
         bitmaps[0] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1blue);
         bitmaps[1] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1red);
         bitmaps[2] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1green);
@@ -53,6 +57,24 @@ public class store extends BaseWindow {
         bitmaps[13] =BitmapFactory.decodeResource(getResources(), R.drawable.ufored);
         bitmaps[14] =BitmapFactory.decodeResource(getResources(), R.drawable.ufogreen);
         bitmaps[15] =BitmapFactory.decodeResource(getResources(), R.drawable.ufoyellow);
+        //
+        bullets[0] =BitmapFactory.decodeResource(getResources(), R.drawable.laserred1);
+        bullets[1] =BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen1);
+        bullets[2] =BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1);
+        bullets[3] =BitmapFactory.decodeResource(getResources(), R.drawable.laserred2);
+        bullets[4] =BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen2);
+        bullets[5] =BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2);
+        bullets[6] =BitmapFactory.decodeResource(getResources(), R.drawable.laserred3);
+        bullets[7] =BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen3);
+        bullets[8] =BitmapFactory.decodeResource(getResources(), R.drawable.laserblue3);
+        bullets[9] =BitmapFactory.decodeResource(getResources(), R.drawable.laserred4);
+        bullets[10] =BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen4);
+        bullets[11] =BitmapFactory.decodeResource(getResources(), R.drawable.laserblue4);
+        bullets[12] =BitmapFactory.decodeResource(getResources(), R.drawable.mix1);
+        bullets[13] =BitmapFactory.decodeResource(getResources(), R.drawable.mix2);
+        bullets[14] =BitmapFactory.decodeResource(getResources(), R.drawable.mix3);
+        bullets[15] =BitmapFactory.decodeResource(getResources(), R.drawable.mix4);
+
         initBitmap();
         if (thread.isAlive()) {
             thread.start();
@@ -92,6 +114,8 @@ public class store extends BaseWindow {
         scaley = screen_height / background.getHeight();
         back_x = screen_width / 2 - back.getWidth() / 2;
         back_y = screen_height / 2 + 500;
+        proportion_X = ((background.getWidth() -100) /4);
+        proportion_Y = ((background.getHeight() - 100)/9);
     }
 
     @Override
@@ -102,7 +126,48 @@ public class store extends BaseWindow {
             canvas.save();
             canvas.scale(scalex, scaley, 0, 0);
             canvas.drawBitmap(background, 0, 0, paint);
-            canvas.drawBitmap(bitmaps[0], 100, 100, paint);
+            canvas.drawBitmap(bitmaps[0], 200, 50, paint);
+            canvas.drawBitmap(bitmaps[1], 200 +1*proportion_X, 50 , paint);
+            canvas.drawBitmap(bitmaps[2], 200 +2*proportion_X, 50 , paint);
+            canvas.drawBitmap(bitmaps[3], 200 +3*proportion_X, 50 , paint);
+            //
+            canvas.drawBitmap(bitmaps[4], 200, 50 + 1*proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[5], 200 +1*proportion_X, 50 + 1*proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[6], 200 +2*proportion_X, 50 + 1*proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[7], 200 +3*proportion_X, 50 + 1*proportion_Y, paint);
+            //
+            canvas.drawBitmap(bitmaps[8], 200, 50+ 2*proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[9], 200 +1*proportion_X, 50 + 2*proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[10], 200 +2*proportion_X, 50 + 2*proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[11], 200 +3*proportion_X, 50 + 2*proportion_Y, paint);
+            //
+            canvas.drawBitmap(bitmaps[12], 200, 50+ 3*proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[13], 200 +1*proportion_X, 50 + 3*proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[14], 200 +2*proportion_X, 50 + 3*proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[15], 200 +3*proportion_X, 50 + 3*proportion_Y, paint);
+            //
+            canvas.drawBitmap(bullets[0], 200, 50+ 4*proportion_Y, paint);
+            canvas.drawBitmap(bullets[1], 200 +1*proportion_X, 50 + 4*proportion_Y, paint);
+            canvas.drawBitmap(bullets[2], 200 +2*proportion_X, 50 + 4*proportion_Y, paint);
+            canvas.drawBitmap(bullets[12], 200 +3*proportion_X, 50 + 4*proportion_Y, paint);
+            //
+            canvas.drawBitmap(bullets[3], 200, 50+ 5*proportion_Y, paint);
+            canvas.drawBitmap(bullets[4], 200 +1*proportion_X, 50 + 5*proportion_Y, paint);
+            canvas.drawBitmap(bullets[5], 200 +2*proportion_X, 50 + 5*proportion_Y, paint);
+            canvas.drawBitmap(bullets[13], 200 +3*proportion_X, 50 + 5*proportion_Y, paint);
+            //
+            canvas.drawBitmap(bullets[6], 200, 50+ 6*proportion_Y, paint);
+            canvas.drawBitmap(bullets[7], 200 +1*proportion_X, 50 + 6*proportion_Y, paint);
+            canvas.drawBitmap(bullets[8], 200 +2*proportion_X, 50 + 6*proportion_Y, paint);
+            canvas.drawBitmap(bullets[14], 200 +3*proportion_X, 50 + 6*proportion_Y, paint);
+            //
+            canvas.drawBitmap(bullets[9], 200, 50+ 7*proportion_Y, paint);
+            canvas.drawBitmap(bullets[10], 200 +1*proportion_X, 50 + 7*proportion_Y, paint);
+            canvas.drawBitmap(bullets[11], 200 +2*proportion_X, 50 + 7*proportion_Y, paint);
+            canvas.drawBitmap(bullets[15], 200 +3*proportion_X, 50 + 7*proportion_Y, paint);
+
+            //
+
             canvas.restore();
             canvas.drawBitmap(back, back_x, back_y, paint);
             canvas.restore();

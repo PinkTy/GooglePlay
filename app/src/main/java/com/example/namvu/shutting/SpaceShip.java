@@ -66,7 +66,7 @@ public class SpaceShip extends GameObject {
         rect = getRectangle();
         rectFortouch = getRectangleTouch();
         if (ConstantUtil.SPACESHIP_STYLE == 5){
-            animation.setFrames(GamePanel.NamSpaceShip);
+            animation.setFrames(GamePanel.NamAndYAngSpaceShip);
             animation.setDelay(10);
         }
 

@@ -45,7 +45,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
     Bitmap[] explosionImageRSmall = new Bitmap[9];
     Bitmap[] explosionImageSonic = new Bitmap[9];
     Bitmap[] explosionImageSonicSmall = new Bitmap[9];
-    public static Bitmap[] NamSpaceShip = new Bitmap[16];
+    public static Bitmap[] NamAndYAngSpaceShip = new Bitmap[16];
 
     public static int copySavestate;
     public static float copyscaleFactorX;
@@ -211,22 +211,22 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                 }
                 break;
             case 5:
-                NamSpaceShip[0] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1blue);
-                NamSpaceShip[1] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1red);
-                NamSpaceShip[2] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1green);
-                NamSpaceShip[3] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1orange);
-                NamSpaceShip[4] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2blue);
-                NamSpaceShip[5] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2red);
-                NamSpaceShip[6] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2green);
-                NamSpaceShip[7] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2orange);
-                NamSpaceShip[8] =BitmapFactory.decodeResource(getResources(), R.drawable.spaceship);
-                NamSpaceShip[9] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3red);
-                NamSpaceShip[10] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3green);
-                NamSpaceShip[11] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3orange);
-                NamSpaceShip[12] =BitmapFactory.decodeResource(getResources(), R.drawable.ufoblue);
-                NamSpaceShip[13] =BitmapFactory.decodeResource(getResources(), R.drawable.ufored);
-                NamSpaceShip[14] =BitmapFactory.decodeResource(getResources(), R.drawable.ufogreen);
-                NamSpaceShip[15] =BitmapFactory.decodeResource(getResources(), R.drawable.ufoyellow);
+                NamAndYAngSpaceShip[0] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1blue);
+                NamAndYAngSpaceShip[1] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1red);
+                NamAndYAngSpaceShip[2] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1green);
+                NamAndYAngSpaceShip[3] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1orange);
+                NamAndYAngSpaceShip[4] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2blue);
+                NamAndYAngSpaceShip[5] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2red);
+                NamAndYAngSpaceShip[6] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2green);
+                NamAndYAngSpaceShip[7] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2orange);
+                NamAndYAngSpaceShip[8] =BitmapFactory.decodeResource(getResources(), R.drawable.spaceship);
+                NamAndYAngSpaceShip[9] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3red);
+                NamAndYAngSpaceShip[10] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3green);
+                NamAndYAngSpaceShip[11] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3orange);
+                NamAndYAngSpaceShip[12] =BitmapFactory.decodeResource(getResources(), R.drawable.ufoblue);
+                NamAndYAngSpaceShip[13] =BitmapFactory.decodeResource(getResources(), R.drawable.ufored);
+                NamAndYAngSpaceShip[14] =BitmapFactory.decodeResource(getResources(), R.drawable.ufogreen);
+                NamAndYAngSpaceShip[15] =BitmapFactory.decodeResource(getResources(), R.drawable.ufoyellow);
                 spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.ufoyellow), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
                 break;
 
