@@ -132,6 +132,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background));
         bg.setVector(5);
+        rect = new Rect(0, 0, WIDTH-20, HEIGHT);
         timeCount = System.nanoTime();
         WIDTH = bg.image.getWidth();
         HEIGHT = bg.image.getHeight();
@@ -582,8 +583,11 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                     explosions.add(new Explosion(explosionImageSonicSmall, spaceShip.x - 60, spaceShip.rect.top - 90));
                     spaceShip.health = 0;
                     spaceShip.moving(false);
-                    spaceShip.setY(-500);
-                    gameOver = true;
+                    if(!((!rect.contains(spaceShip.x,spaceShip.y))&&spaceShip.rect.centerY() <50)){
+                        spaceShip.setY(-500);
+                        gameOver = true;
+                        spaceShip.moving(false);
+                    }
 
 
                 }
@@ -717,7 +721,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
 
             return true;
         }
-        if (event.getAction() == MotionEvent.ACTION_MOVE && spaceShip.move) {
+        if (event.getAction() == MotionEvent.ACTION_MOVE && spaceShip.move&&!gameOver) {
             int x = (int) (event.getRawX() / copyscaleFactorX);
             int y = (int) (event.getRawY() / copyscaleFactorY);
             if (x + spaceShip.width > WIDTH) {
@@ -1022,7 +1026,14 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                         }
                         break;
                     }
+                    case 11:{
 
+                        canvas.drawText("I hope someone will be at this stage" , WIDTH / 2 - 275, HEIGHT / 2 -100, paint1);
+                        canvas.drawText("Congratulations!!!! you defeat my game!! I hope you enjoy the easter egg" , 200, HEIGHT / 2, paint1);
+                        canvas.drawText("Can you please send an email to:vuphuongnam81197@gmail.com with the state picture" , 20, HEIGHT / 2 +100, paint1);
+                        canvas.drawText("It will make my day!!!" , WIDTH / 2 - 175, HEIGHT / 2 +200, paint1);
+
+                    }
                 }
             }
 
@@ -1043,6 +1054,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
             final int savedState = canvas.save();
             canvas.scale(scaleFactorX, scaleFactorY);
             bg.draw(canvas);
+            System.out.println((!rect.contains(spaceShip.x,spaceShip.y))&&spaceShip.rect.centerY() <50);
             spaceShip.draw(canvas);
             for (Enumeration e = dictionaryBullets.keys(); e.hasMoreElements(); ) {
                 dictionaryBullets.get(e.nextElement()).draw(canvas);
