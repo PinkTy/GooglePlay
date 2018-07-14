@@ -16,7 +16,7 @@ public class SpaceShip extends GameObject {
 
     //    private int score;
     //    private double dya;
-    public int timeShutting = 0;
+    public int timeShutting = 200;
     public int health = 100;
     public int timeChange = 0;
     public int scoreForStyleOne = 0;
@@ -77,9 +77,9 @@ public class SpaceShip extends GameObject {
 //        Paint fillPaint1 = new Paint();
 //        fillPaint1.setColor(Color.YELLOW);
 //        canvas.drawRect(rectFortouch, fillPaint1);
-//        Paint fillPaint = new Paint();
-//        fillPaint.setColor(Color.RED);
-//        canvas.drawRect(rect, fillPaint);
+        Paint fillPaint = new Paint();
+        fillPaint.setColor(Color.RED);
+        canvas.drawRect(rect, fillPaint);
         canvas.drawBitmap(spritessheet, x,y, null);
         //add shield bitmap
         canvas.drawBitmap(shield, x-20,y-25, null);

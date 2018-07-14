@@ -7,7 +7,7 @@ public interface ConstantUtil  {
     //1 blue, 2 red, 3 green, 4 MIX
     int BULLET_COlOR = 3;
     //100000 at game style 3
-    
+
 
 
 
