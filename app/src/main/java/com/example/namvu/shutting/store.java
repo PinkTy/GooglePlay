@@ -13,15 +13,16 @@ import android.view.SurfaceHolder;
 
 @SuppressLint("ViewConstructor")
 public class store extends BaseWindow {
+
     private float back_x;
-    private int widthOfSpaceShip,heightOfSpaceShip,shipSeclected ,bulletSelected ;
+    private int widthOfSpaceShip, heightOfSpaceShip, shipSeclected, bulletSelected;
     public static int BULLET_STYLE = 1;
     //1 blue, 2 red, 3 green, 4 MIX
     public static int BULLET_COlOR = 1;
     // 1 style 1, 2 style 2,3 style 3,4 style UFO, 5 NamAndYAngSpaceShip
-    public static int SPACESHIP_STYLE = 2;
+    public static int SPACESHIP_STYLE = 5;
     //1 blue, 2 red, 3 green, 4 Yellow or Orange
-    public static int SHIP_COlOR = 3;
+    public static int SHIP_COlOR = 1;
 
 
     private float back_y;
@@ -29,11 +30,11 @@ public class store extends BaseWindow {
     private Bitmap back;
     private float proportion_X, proportion_Y;
     private Rect rect;
-    private Rect[] spaceShipRect = new Rect[16];
-    private Rect[] spaceShipRectTouch = new Rect[16];
+    private Rect[] spaceShipRect = new Rect[17];
+    private Rect[] spaceShipRectTouch = new Rect[17];
     private Rect[] bulletsRect = new Rect[16];
     private Rect[] bulletsRectTouch = new Rect[16];
-    private  Paint paint1 = new Paint();
+    private Paint paint1 = new Paint();
     private MediaPlayer mMediaPlayer;
     private Bitmap[] bitmaps = new Bitmap[16];
     private Bitmap[] bullets = new Bitmap[16];
@@ -46,6 +47,8 @@ public class store extends BaseWindow {
         paint.setColor(Color.RED);
         shipSeclected = 0;
         bulletSelected = 0;
+        game.loadDataShip();
+
         Load();
         System.out.println(shipSeclected);
         rect = new Rect();
@@ -64,39 +67,39 @@ public class store extends BaseWindow {
         super.surfaceCreated(arg0);
 
 
-        bitmaps[0] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1blue);
-        bitmaps[1] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1red);
-        bitmaps[2] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1green);
-        bitmaps[3] =BitmapFactory.decodeResource(getResources(), R.drawable.playership1orange);
-        bitmaps[4] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2blue);
-        bitmaps[5] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2red);
-        bitmaps[6] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2green);
-        bitmaps[7] =BitmapFactory.decodeResource(getResources(), R.drawable.playership2orange);
-        bitmaps[8] =BitmapFactory.decodeResource(getResources(), R.drawable.spaceship);
-        bitmaps[9] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3red);
-        bitmaps[10] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3green);
-        bitmaps[11] =BitmapFactory.decodeResource(getResources(), R.drawable.playership3orange);
-        bitmaps[12] =BitmapFactory.decodeResource(getResources(), R.drawable.ufoblue);
-        bitmaps[13] =BitmapFactory.decodeResource(getResources(), R.drawable.ufored);
-        bitmaps[14] =BitmapFactory.decodeResource(getResources(), R.drawable.ufogreen);
-        bitmaps[15] =BitmapFactory.decodeResource(getResources(), R.drawable.ufoyellow);
+        bitmaps[0] = BitmapFactory.decodeResource(getResources(), R.drawable.playership1blue);
+        bitmaps[1] = BitmapFactory.decodeResource(getResources(), R.drawable.playership1red);
+        bitmaps[2] = BitmapFactory.decodeResource(getResources(), R.drawable.playership1green);
+        bitmaps[3] = BitmapFactory.decodeResource(getResources(), R.drawable.playership1orange);
+        bitmaps[4] = BitmapFactory.decodeResource(getResources(), R.drawable.playership2blue);
+        bitmaps[5] = BitmapFactory.decodeResource(getResources(), R.drawable.playership2red);
+        bitmaps[6] = BitmapFactory.decodeResource(getResources(), R.drawable.playership2green);
+        bitmaps[7] = BitmapFactory.decodeResource(getResources(), R.drawable.playership2orange);
+        bitmaps[8] = BitmapFactory.decodeResource(getResources(), R.drawable.spaceship);
+        bitmaps[9] = BitmapFactory.decodeResource(getResources(), R.drawable.playership3red);
+        bitmaps[10] = BitmapFactory.decodeResource(getResources(), R.drawable.playership3green);
+        bitmaps[11] = BitmapFactory.decodeResource(getResources(), R.drawable.playership3orange);
+        bitmaps[12] = BitmapFactory.decodeResource(getResources(), R.drawable.ufoblue);
+        bitmaps[13] = BitmapFactory.decodeResource(getResources(), R.drawable.ufored);
+        bitmaps[14] = BitmapFactory.decodeResource(getResources(), R.drawable.ufogreen);
+        bitmaps[15] = BitmapFactory.decodeResource(getResources(), R.drawable.ufoyellow);
         //
-        bullets[0] =BitmapFactory.decodeResource(getResources(), R.drawable.laserred1);
-        bullets[1] =BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen1);
-        bullets[2] =BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1);
-        bullets[3] =BitmapFactory.decodeResource(getResources(), R.drawable.laserred2);
-        bullets[4] =BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen2);
-        bullets[5] =BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2);
-        bullets[6] =BitmapFactory.decodeResource(getResources(), R.drawable.laserred3);
-        bullets[7] =BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen3);
-        bullets[8] =BitmapFactory.decodeResource(getResources(), R.drawable.laserblue3);
-        bullets[9] =BitmapFactory.decodeResource(getResources(), R.drawable.laserred4);
-        bullets[10] =BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen4);
-        bullets[11] =BitmapFactory.decodeResource(getResources(), R.drawable.laserblue4);
-        bullets[12] =BitmapFactory.decodeResource(getResources(), R.drawable.mix1);
-        bullets[13] =BitmapFactory.decodeResource(getResources(), R.drawable.mix2);
-        bullets[14] =BitmapFactory.decodeResource(getResources(), R.drawable.mix3);
-        bullets[15] =BitmapFactory.decodeResource(getResources(), R.drawable.mix4);
+        bullets[0] = BitmapFactory.decodeResource(getResources(), R.drawable.laserred1);
+        bullets[1] = BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen1);
+        bullets[2] = BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1);
+        bullets[3] = BitmapFactory.decodeResource(getResources(), R.drawable.laserred2);
+        bullets[4] = BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen2);
+        bullets[5] = BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2);
+        bullets[6] = BitmapFactory.decodeResource(getResources(), R.drawable.laserred3);
+        bullets[7] = BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen3);
+        bullets[8] = BitmapFactory.decodeResource(getResources(), R.drawable.laserblue3);
+        bullets[9] = BitmapFactory.decodeResource(getResources(), R.drawable.laserred4);
+        bullets[10] = BitmapFactory.decodeResource(getResources(), R.drawable.lasergreen4);
+        bullets[11] = BitmapFactory.decodeResource(getResources(), R.drawable.laserblue4);
+        bullets[12] = BitmapFactory.decodeResource(getResources(), R.drawable.mix1);
+        bullets[13] = BitmapFactory.decodeResource(getResources(), R.drawable.mix2);
+        bullets[14] = BitmapFactory.decodeResource(getResources(), R.drawable.mix3);
+        bullets[15] = BitmapFactory.decodeResource(getResources(), R.drawable.mix4);
 
         initBitmap();
         if (thread.isAlive()) {
@@ -115,17 +118,17 @@ public class store extends BaseWindow {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN){
-            int x = (int)(event.getX()/scalex);
-            int y = (int) (event.getY()/scaley);
-            for (int i = 0; i <spaceShipRectTouch.length ; i++) {
-                if (spaceShipRectTouch[i].contains(x, y)){
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            int x = (int) (event.getX() / scalex);
+            int y = (int) (event.getY() / scaley);
+            for (int i = 0; i < spaceShipRectTouch.length; i++) {
+                if (spaceShipRectTouch[i].contains(x, y)) {
                     shipSeclected = i;
                 }
 
             }
-            for (int i = 0; i <bulletsRectTouch.length ; i++) {
-                if (bulletsRectTouch[i].contains(x, y)){
+            for (int i = 0; i < bulletsRectTouch.length; i++) {
+                if (bulletsRectTouch[i].contains(x, y)) {
                     bulletSelected = i;
                 }
             }
@@ -138,6 +141,8 @@ public class store extends BaseWindow {
             if (x > back_x && x < back_x + back.getWidth()
                     && y > back_y && y < back_y + back.getHeight()) {
                 mMediaPlayer.start();
+                Save();
+                game.saveData(4);
                 drawSelf();
                 game.getHandler().sendEmptyMessage(ConstantUtil.TO_MENU_PANEL);
             }
@@ -153,122 +158,247 @@ public class store extends BaseWindow {
         scaley = screen_height / background.getHeight();
         back_x = screen_width / 2 - back.getWidth() / 2;
         back_y = screen_height / 2 + 500;
-        proportion_X = ((background.getWidth() -100) /4);
-        proportion_Y = ((background.getHeight() - 100)/9);
+        proportion_X = ((background.getWidth() - 100) / 4);
+        proportion_Y = ((background.getHeight() - 100) / 9);
         widthOfSpaceShip = bitmaps[0].getWidth();
-        heightOfSpaceShip =  bitmaps[0].getHeight();
+        heightOfSpaceShip = bitmaps[0].getHeight();
         //
-        bulletsRect[0] = new Rect(200,(int)(50 + 4*proportion_Y),200+bullets[0].getWidth(), (int)(50 + 4*proportion_Y)+bullets[0].getHeight());
-        bulletsRect[1] = new Rect((int)(200 +1*proportion_X),(int)(50 + 4*proportion_Y),(int)((200 +1*proportion_X) +bullets[0].getWidth()),(int)(50 + 4*proportion_Y)+ bullets[0].getHeight());
-        bulletsRect[2] = new Rect((int)(200 +2*proportion_X),(int)(50 + 4*proportion_Y),(int)((200 +2*proportion_X)+bullets[0].getWidth()),(int)(50 + 4*proportion_Y)+ bullets[0].getHeight());
-        bulletsRect[3] = new Rect((int)(200 +3*proportion_X),(int)(50 + 4*proportion_Y),(int)((200 +3*proportion_X) +bullets[12].getWidth()),(int)(50 + 4*proportion_Y)+ bullets[12].getHeight());
+        bulletsRect[0] = new Rect(200, (int) (50 + 4 * proportion_Y), 200 + bullets[0].getWidth(), (int) (50 + 4 * proportion_Y) + bullets[0].getHeight());
+        bulletsRect[1] = new Rect((int) (200 + 1 * proportion_X), (int) (50 + 4 * proportion_Y), (int) ((200 + 1 * proportion_X) + bullets[0].getWidth()), (int) (50 + 4 * proportion_Y) + bullets[0].getHeight());
+        bulletsRect[2] = new Rect((int) (200 + 2 * proportion_X), (int) (50 + 4 * proportion_Y), (int) ((200 + 2 * proportion_X) + bullets[0].getWidth()), (int) (50 + 4 * proportion_Y) + bullets[0].getHeight());
+        bulletsRect[3] = new Rect((int) (200 + 3 * proportion_X), (int) (50 + 4 * proportion_Y), (int) ((200 + 3 * proportion_X) + bullets[12].getWidth()), (int) (50 + 4 * proportion_Y) + bullets[12].getHeight());
         //
-        bulletsRect[4] = new Rect(200,(int)(50 + 5*proportion_Y),200+bullets[4].getWidth(), (int)(50 + 5*proportion_Y)+bullets[4].getHeight());
-        bulletsRect[5] = new Rect((int)(200 +1*proportion_X),(int)(50 + 5*proportion_Y),(int)((200 +1*proportion_X) +bullets[4].getWidth()),(int)(50 + 5*proportion_Y)+ bullets[4].getHeight());
-        bulletsRect[6] = new Rect((int)(200 +2*proportion_X),(int)(50 + 5*proportion_Y),(int)((200 +2*proportion_X)+bullets[4].getWidth()),(int)(50 + 5*proportion_Y)+ bullets[4].getHeight());
-        bulletsRect[7] = new Rect((int)(200 +3*proportion_X),(int)(50 + 5*proportion_Y),(int)((200 +3*proportion_X) +bullets[13].getWidth()),(int)(50 + 5*proportion_Y)+ bullets[13].getHeight());
+        bulletsRect[4] = new Rect(200, (int) (50 + 5 * proportion_Y), 200 + bullets[4].getWidth(), (int) (50 + 5 * proportion_Y) + bullets[4].getHeight());
+        bulletsRect[5] = new Rect((int) (200 + 1 * proportion_X), (int) (50 + 5 * proportion_Y), (int) ((200 + 1 * proportion_X) + bullets[4].getWidth()), (int) (50 + 5 * proportion_Y) + bullets[4].getHeight());
+        bulletsRect[6] = new Rect((int) (200 + 2 * proportion_X), (int) (50 + 5 * proportion_Y), (int) ((200 + 2 * proportion_X) + bullets[4].getWidth()), (int) (50 + 5 * proportion_Y) + bullets[4].getHeight());
+        bulletsRect[7] = new Rect((int) (200 + 3 * proportion_X), (int) (50 + 5 * proportion_Y), (int) ((200 + 3 * proportion_X) + bullets[13].getWidth()), (int) (50 + 5 * proportion_Y) + bullets[13].getHeight());
         //
-        bulletsRect[8] = new Rect(200,(int)(50 + 6*proportion_Y),200+bullets[6].getWidth(), (int)(50 + 6*proportion_Y)+bullets[6].getHeight());
-        bulletsRect[9] = new Rect((int)(200 +1*proportion_X),(int)(50 + 6*proportion_Y),(int)((200 +1*proportion_X) +bullets[6].getWidth()),(int)(50 + 6*proportion_Y)+ bullets[6].getHeight());
-        bulletsRect[10] = new Rect((int)(200 +2*proportion_X),(int)(50 + 6*proportion_Y),(int)((200 +2*proportion_X)+bullets[6].getWidth()),(int)(50 + 6*proportion_Y)+ bullets[6].getHeight());
-        bulletsRect[11] = new Rect((int)(200 +3*proportion_X),(int)(50 + 6*proportion_Y),(int)((200 +3*proportion_X) +bullets[14].getWidth()),(int)(50 + 6*proportion_Y)+ bullets[14].getHeight());
-        //
-
-        bulletsRect[12] = new Rect(200,(int)(50 + 7*proportion_Y),200+bullets[9].getWidth(), (int)(50 + 7*proportion_Y)+heightOfSpaceShip);
-        bulletsRect[13] = new Rect((int)(200 +1*proportion_X),(int)(50 + 7*proportion_Y),(int)((200 +1*proportion_X) +bullets[9].getWidth()),(int)(50 + 7*proportion_Y)+ bullets[9].getHeight());
-        bulletsRect[14] = new Rect((int)(200 +2*proportion_X),(int)(50 + 7*proportion_Y),(int)((200 +2*proportion_X)+bullets[9].getWidth()),(int)(50 + 7*proportion_Y)+ bullets[9].getHeight());
-        bulletsRect[15] = new Rect((int)(200 +3*proportion_X),(int)(50 + 7*proportion_Y),(int)((200 +3*proportion_X) +bullets[15].getWidth()),(int)(50 + 7*proportion_Y)+ bullets[15].getHeight());
+        bulletsRect[8] = new Rect(200, (int) (50 + 6 * proportion_Y), 200 + bullets[6].getWidth(), (int) (50 + 6 * proportion_Y) + bullets[6].getHeight());
+        bulletsRect[9] = new Rect((int) (200 + 1 * proportion_X), (int) (50 + 6 * proportion_Y), (int) ((200 + 1 * proportion_X) + bullets[6].getWidth()), (int) (50 + 6 * proportion_Y) + bullets[6].getHeight());
+        bulletsRect[10] = new Rect((int) (200 + 2 * proportion_X), (int) (50 + 6 * proportion_Y), (int) ((200 + 2 * proportion_X) + bullets[6].getWidth()), (int) (50 + 6 * proportion_Y) + bullets[6].getHeight());
+        bulletsRect[11] = new Rect((int) (200 + 3 * proportion_X), (int) (50 + 6 * proportion_Y), (int) ((200 + 3 * proportion_X) + bullets[14].getWidth()), (int) (50 + 6 * proportion_Y) + bullets[14].getHeight());
         //
 
-
-        bulletsRectTouch[0] = new Rect(200-100,(int)(50 + 4*proportion_Y),200+bullets[0].getWidth()+100, (int)(50 + 4*proportion_Y)+bullets[0].getHeight());
-        bulletsRectTouch[1] = new Rect((int)(200-100 +1*proportion_X),(int)(50 + 4*proportion_Y),(int)((200 +1*proportion_X) +bullets[0].getWidth()+100),(int)(50 + 4*proportion_Y)+ bullets[0].getHeight());
-        bulletsRectTouch[2] = new Rect((int)(200-100 +2*proportion_X),(int)(50 + 4*proportion_Y),(int)((200 +2*proportion_X)+bullets[0].getWidth()+100),(int)(50 + 4*proportion_Y)+ bullets[0].getHeight());
-        bulletsRectTouch[3] = new Rect((int)(200-100 +3*proportion_X),(int)(50 + 4*proportion_Y),(int)((200 +3*proportion_X) +bullets[12].getWidth()+100),(int)(50 + 4*proportion_Y)+ bullets[12].getHeight());
-        //
-        bulletsRectTouch[4] = new Rect(200-100,(int)(50 + 5*proportion_Y),200+bullets[4].getWidth()+100, (int)(50 + 5*proportion_Y)+bullets[4].getHeight());
-        bulletsRectTouch[5] = new Rect((int)(200-100 +1*proportion_X),(int)(50 + 5*proportion_Y),(int)((200 +1*proportion_X) +bullets[4].getWidth()+100),(int)(50 + 5*proportion_Y)+ bullets[4].getHeight());
-        bulletsRectTouch[6] = new Rect((int)(200-100 +2*proportion_X),(int)(50 + 5*proportion_Y),(int)((200 +2*proportion_X)+bullets[4].getWidth()+100),(int)(50 + 5*proportion_Y)+ bullets[4].getHeight());
-        bulletsRectTouch[7] = new Rect((int)(200-100 +3*proportion_X),(int)(50 + 5*proportion_Y),(int)((200 +3*proportion_X) +bullets[13].getWidth()+100),(int)(50 + 5*proportion_Y)+ bullets[13].getHeight());
-        //
-        bulletsRectTouch[8] = new Rect(200-100,(int)(50 + 6*proportion_Y),200+bullets[6].getWidth()+100, (int)(50 + 6*proportion_Y)+bullets[6].getHeight());
-        bulletsRectTouch[9] = new Rect((int)(200-100 +1*proportion_X),(int)(50 + 6*proportion_Y),(int)((200 +1*proportion_X) +bullets[6].getWidth()+100),(int)(50 + 6*proportion_Y)+ bullets[6].getHeight());
-        bulletsRectTouch[10] = new Rect((int)(200-100 +2*proportion_X),(int)(50 + 6*proportion_Y),(int)((200 +2*proportion_X)+bullets[6].getWidth()+100),(int)(50 + 6*proportion_Y)+ bullets[6].getHeight());
-        bulletsRectTouch[11] = new Rect((int)(200-100 +3*proportion_X),(int)(50 + 6*proportion_Y),(int)((200 +3*proportion_X) +bullets[14].getWidth()+100),(int)(50 + 6*proportion_Y)+ bullets[14].getHeight());
+        bulletsRect[12] = new Rect(200, (int) (50 + 7 * proportion_Y), 200 + bullets[9].getWidth(), (int) (50 + 7 * proportion_Y) + heightOfSpaceShip);
+        bulletsRect[13] = new Rect((int) (200 + 1 * proportion_X), (int) (50 + 7 * proportion_Y), (int) ((200 + 1 * proportion_X) + bullets[9].getWidth()), (int) (50 + 7 * proportion_Y) + bullets[9].getHeight());
+        bulletsRect[14] = new Rect((int) (200 + 2 * proportion_X), (int) (50 + 7 * proportion_Y), (int) ((200 + 2 * proportion_X) + bullets[9].getWidth()), (int) (50 + 7 * proportion_Y) + bullets[9].getHeight());
+        bulletsRect[15] = new Rect((int) (200 + 3 * proportion_X), (int) (50 + 7 * proportion_Y), (int) ((200 + 3 * proportion_X) + bullets[15].getWidth()), (int) (50 + 7 * proportion_Y) + bullets[15].getHeight());
         //
 
-        bulletsRectTouch[12] = new Rect(200-100,(int)(50 + 7*proportion_Y),200+bullets[9].getWidth()+100, (int)(50 + 7*proportion_Y)+heightOfSpaceShip);
-        bulletsRectTouch[13] = new Rect((int)(200-100 +1*proportion_X),(int)(50 + 7*proportion_Y),(int)((200 +1*proportion_X) +bullets[9].getWidth()+100),(int)(50 + 7*proportion_Y)+ bullets[9].getHeight());
-        bulletsRectTouch[14] = new Rect((int)(200-100 +2*proportion_X),(int)(50 + 7*proportion_Y),(int)((200 +2*proportion_X)+bullets[9].getWidth()+100),(int)(50 + 7*proportion_Y)+ bullets[9].getHeight());
-        bulletsRectTouch[15] = new Rect((int)(200-100 +3*proportion_X),(int)(50 + 7*proportion_Y),(int)((200 +3*proportion_X) +bullets[15].getWidth()+100),(int)(50 + 7*proportion_Y)+ bullets[15].getHeight());
 
-
-
-
-
-
-        spaceShipRect[0] = new Rect(200,50,200+widthOfSpaceShip, 50+heightOfSpaceShip);
-        spaceShipRect[1] = new Rect((int)(200 +1*proportion_X),50,(int)((200 +1*proportion_X) +widthOfSpaceShip),50+ heightOfSpaceShip);
-        spaceShipRect[2] = new Rect((int)(200 +2*proportion_X),50,(int)((200 +2*proportion_X)+widthOfSpaceShip),50+ heightOfSpaceShip);
-        spaceShipRect[3] = new Rect((int)(200 +3*proportion_X),50,(int)((200 +3*proportion_X) +widthOfSpaceShip),50+ heightOfSpaceShip);
+        bulletsRectTouch[0] = new Rect(200 - 100, (int) (50 + 4 * proportion_Y), 200 + bullets[0].getWidth() + 100, (int) (50 + 4 * proportion_Y) + bullets[0].getHeight());
+        bulletsRectTouch[1] = new Rect((int) (200 - 100 + 1 * proportion_X), (int) (50 + 4 * proportion_Y), (int) ((200 + 1 * proportion_X) + bullets[0].getWidth() + 100), (int) (50 + 4 * proportion_Y) + bullets[0].getHeight());
+        bulletsRectTouch[2] = new Rect((int) (200 - 100 + 2 * proportion_X), (int) (50 + 4 * proportion_Y), (int) ((200 + 2 * proportion_X) + bullets[0].getWidth() + 100), (int) (50 + 4 * proportion_Y) + bullets[0].getHeight());
+        bulletsRectTouch[3] = new Rect((int) (200 - 100 + 3 * proportion_X), (int) (50 + 4 * proportion_Y), (int) ((200 + 3 * proportion_X) + bullets[12].getWidth() + 100), (int) (50 + 4 * proportion_Y) + bullets[12].getHeight());
         //
-        spaceShipRect[4] = new Rect(200,(int)(50 + 1*proportion_Y),200+widthOfSpaceShip, (int)(50 + 1*proportion_Y)+heightOfSpaceShip);
-        spaceShipRect[5] = new Rect((int)(200 +1*proportion_X),(int)(50 + 1*proportion_Y),(int)(200 +1*proportion_X)+widthOfSpaceShip, (int)(50 + 1*proportion_Y)+heightOfSpaceShip);
-        spaceShipRect[6] = new Rect((int)(200 +2*proportion_X),(int)(50 + 1*proportion_Y),(int)(200 +2*proportion_X)+widthOfSpaceShip, (int)(50 + 1*proportion_Y)+heightOfSpaceShip);
-        spaceShipRect[7] = new Rect((int)(200 +3*proportion_X),(int)(50 + 1*proportion_Y),(int)(200 +3*proportion_X)+widthOfSpaceShip, (int)(50 + 1*proportion_Y)+heightOfSpaceShip);
+        bulletsRectTouch[4] = new Rect(200 - 100, (int) (50 + 5 * proportion_Y), 200 + bullets[4].getWidth() + 100, (int) (50 + 5 * proportion_Y) + bullets[4].getHeight());
+        bulletsRectTouch[5] = new Rect((int) (200 - 100 + 1 * proportion_X), (int) (50 + 5 * proportion_Y), (int) ((200 + 1 * proportion_X) + bullets[4].getWidth() + 100), (int) (50 + 5 * proportion_Y) + bullets[4].getHeight());
+        bulletsRectTouch[6] = new Rect((int) (200 - 100 + 2 * proportion_X), (int) (50 + 5 * proportion_Y), (int) ((200 + 2 * proportion_X) + bullets[4].getWidth() + 100), (int) (50 + 5 * proportion_Y) + bullets[4].getHeight());
+        bulletsRectTouch[7] = new Rect((int) (200 - 100 + 3 * proportion_X), (int) (50 + 5 * proportion_Y), (int) ((200 + 3 * proportion_X) + bullets[13].getWidth() + 100), (int) (50 + 5 * proportion_Y) + bullets[13].getHeight());
         //
-        spaceShipRect[8] = new Rect(200,(int)(50 + 2*proportion_Y),200+widthOfSpaceShip, (int)(50 + 2*proportion_Y)+heightOfSpaceShip);
-        spaceShipRect[9] = new Rect((int)(200 +1*proportion_X),(int)(50 + 2*proportion_Y),(int)(200 +1*proportion_X)+widthOfSpaceShip, (int)(50 + 2*proportion_Y)+heightOfSpaceShip);
-        spaceShipRect[10] = new Rect((int)(200 +2*proportion_X),(int)(50 + 2*proportion_Y),(int)(200 +2*proportion_X)+widthOfSpaceShip, (int)(50 + 2*proportion_Y)+heightOfSpaceShip);
-        spaceShipRect[11] = new Rect((int)(200 +3*proportion_X),(int)(50 + 2*proportion_Y),(int)(200 +3*proportion_X)+widthOfSpaceShip, (int)(50 + 2*proportion_Y)+heightOfSpaceShip);
+        bulletsRectTouch[8] = new Rect(200 - 100, (int) (50 + 6 * proportion_Y), 200 + bullets[6].getWidth() + 100, (int) (50 + 6 * proportion_Y) + bullets[6].getHeight());
+        bulletsRectTouch[9] = new Rect((int) (200 - 100 + 1 * proportion_X), (int) (50 + 6 * proportion_Y), (int) ((200 + 1 * proportion_X) + bullets[6].getWidth() + 100), (int) (50 + 6 * proportion_Y) + bullets[6].getHeight());
+        bulletsRectTouch[10] = new Rect((int) (200 - 100 + 2 * proportion_X), (int) (50 + 6 * proportion_Y), (int) ((200 + 2 * proportion_X) + bullets[6].getWidth() + 100), (int) (50 + 6 * proportion_Y) + bullets[6].getHeight());
+        bulletsRectTouch[11] = new Rect((int) (200 - 100 + 3 * proportion_X), (int) (50 + 6 * proportion_Y), (int) ((200 + 3 * proportion_X) + bullets[14].getWidth() + 100), (int) (50 + 6 * proportion_Y) + bullets[14].getHeight());
         //
-        spaceShipRect[12] = new Rect(200,(int)(50 + 3*proportion_Y),200+widthOfSpaceShip, (int)(50 + 3*proportion_Y)+heightOfSpaceShip);
-        spaceShipRect[13] = new Rect((int)(200 +1*proportion_X),(int)(50 + 3*proportion_Y),(int)(200 +1*proportion_X)+widthOfSpaceShip, (int)(50 + 3*proportion_Y)+heightOfSpaceShip);
-        spaceShipRect[14] = new Rect((int)(200 +2*proportion_X),(int)(50 + 3*proportion_Y),(int)(200 +2*proportion_X)+widthOfSpaceShip, (int)(50 + 3*proportion_Y)+heightOfSpaceShip);
-        spaceShipRect[15] = new Rect((int)(200 +3*proportion_X),(int)(50 + 3*proportion_Y),(int)(200 +3*proportion_X)+widthOfSpaceShip, (int)(50 + 3*proportion_Y)+heightOfSpaceShip);
+
+        bulletsRectTouch[12] = new Rect(200 - 100, (int) (50 + 7 * proportion_Y), 200 + bullets[9].getWidth() + 100, (int) (50 + 7 * proportion_Y) + heightOfSpaceShip);
+        bulletsRectTouch[13] = new Rect((int) (200 - 100 + 1 * proportion_X), (int) (50 + 7 * proportion_Y), (int) ((200 + 1 * proportion_X) + bullets[9].getWidth() + 100), (int) (50 + 7 * proportion_Y) + bullets[9].getHeight());
+        bulletsRectTouch[14] = new Rect((int) (200 - 100 + 2 * proportion_X), (int) (50 + 7 * proportion_Y), (int) ((200 + 2 * proportion_X) + bullets[9].getWidth() + 100), (int) (50 + 7 * proportion_Y) + bullets[9].getHeight());
+        bulletsRectTouch[15] = new Rect((int) (200 - 100 + 3 * proportion_X), (int) (50 + 7 * proportion_Y), (int) ((200 + 3 * proportion_X) + bullets[15].getWidth() + 100), (int) (50 + 7 * proportion_Y) + bullets[15].getHeight());
 
 
+        spaceShipRect[0] = new Rect(200, 50, 200 + widthOfSpaceShip, 50 + heightOfSpaceShip);
+        spaceShipRect[1] = new Rect((int) (200 + 1 * proportion_X), 50, (int) ((200 + 1 * proportion_X) + widthOfSpaceShip), 50 + heightOfSpaceShip);
+        spaceShipRect[2] = new Rect((int) (200 + 2 * proportion_X), 50, (int) ((200 + 2 * proportion_X) + widthOfSpaceShip), 50 + heightOfSpaceShip);
+        spaceShipRect[3] = new Rect((int) (200 + 3 * proportion_X), 50, (int) ((200 + 3 * proportion_X) + widthOfSpaceShip), 50 + heightOfSpaceShip);
+        //
+        spaceShipRect[4] = new Rect(200, (int) (50 + 1 * proportion_Y), 200 + widthOfSpaceShip, (int) (50 + 1 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRect[5] = new Rect((int) (200 + 1 * proportion_X), (int) (50 + 1 * proportion_Y), (int) (200 + 1 * proportion_X) + widthOfSpaceShip, (int) (50 + 1 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRect[6] = new Rect((int) (200 + 2 * proportion_X), (int) (50 + 1 * proportion_Y), (int) (200 + 2 * proportion_X) + widthOfSpaceShip, (int) (50 + 1 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRect[7] = new Rect((int) (200 + 3 * proportion_X), (int) (50 + 1 * proportion_Y), (int) (200 + 3 * proportion_X) + widthOfSpaceShip, (int) (50 + 1 * proportion_Y) + heightOfSpaceShip);
+        //
+        spaceShipRect[8] = new Rect(200, (int) (50 + 2 * proportion_Y), 200 + widthOfSpaceShip, (int) (50 + 2 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRect[9] = new Rect((int) (200 + 1 * proportion_X), (int) (50 + 2 * proportion_Y), (int) (200 + 1 * proportion_X) + widthOfSpaceShip, (int) (50 + 2 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRect[10] = new Rect((int) (200 + 2 * proportion_X), (int) (50 + 2 * proportion_Y), (int) (200 + 2 * proportion_X) + widthOfSpaceShip, (int) (50 + 2 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRect[11] = new Rect((int) (200 + 3 * proportion_X), (int) (50 + 2 * proportion_Y), (int) (200 + 3 * proportion_X) + widthOfSpaceShip, (int) (50 + 2 * proportion_Y) + heightOfSpaceShip);
+        //
+        spaceShipRect[12] = new Rect(200, (int) (50 + 3 * proportion_Y), 200 + widthOfSpaceShip, (int) (50 + 3 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRect[13] = new Rect((int) (200 + 1 * proportion_X), (int) (50 + 3 * proportion_Y), (int) (200 + 1 * proportion_X) + widthOfSpaceShip, (int) (50 + 3 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRect[14] = new Rect((int) (200 + 2 * proportion_X), (int) (50 + 3 * proportion_Y), (int) (200 + 2 * proportion_X) + widthOfSpaceShip, (int) (50 + 3 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRect[15] = new Rect((int) (200 + 3 * proportion_X), (int) (50 + 3 * proportion_Y), (int) (200 + 3 * proportion_X) + widthOfSpaceShip, (int) (50 + 3 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRect[16] = new Rect(200, (int) (50 + 8 * proportion_Y), 200 + widthOfSpaceShip, (int) (50 +8 * proportion_Y) + heightOfSpaceShip);
 
-        spaceShipRectTouch[0] = new Rect(200-100,50,200+widthOfSpaceShip+100, 50+heightOfSpaceShip);
-        spaceShipRectTouch[1] = new Rect((int)(200-100 +1*proportion_X),50,(int)((200 +1*proportion_X) +widthOfSpaceShip+100),50+ heightOfSpaceShip);
-        spaceShipRectTouch[2] = new Rect((int)(200-100 +2*proportion_X),50,(int)((200 +2*proportion_X)+widthOfSpaceShip+100),50+ heightOfSpaceShip);
-        spaceShipRectTouch[3] = new Rect((int)(200-100 +3*proportion_X),50,(int)((200 +3*proportion_X) +widthOfSpaceShip+100),50+ heightOfSpaceShip);
+        spaceShipRectTouch[0] = new Rect(200 - 100, 50, 200 + widthOfSpaceShip + 100, 50 + heightOfSpaceShip);
+        spaceShipRectTouch[1] = new Rect((int) (200 - 100 + 1 * proportion_X), 50, (int) ((200 + 1 * proportion_X) + widthOfSpaceShip + 100), 50 + heightOfSpaceShip);
+        spaceShipRectTouch[2] = new Rect((int) (200 - 100 + 2 * proportion_X), 50, (int) ((200 + 2 * proportion_X) + widthOfSpaceShip + 100), 50 + heightOfSpaceShip);
+        spaceShipRectTouch[3] = new Rect((int) (200 - 100 + 3 * proportion_X), 50, (int) ((200 + 3 * proportion_X) + widthOfSpaceShip + 100), 50 + heightOfSpaceShip);
         //
-        spaceShipRectTouch[4] = new Rect(200-100,(int)(50 + 1*proportion_Y),200+widthOfSpaceShip+100, (int)(50 + 1*proportion_Y)+heightOfSpaceShip);
-        spaceShipRectTouch[5] = new Rect((int)(200-100 +1*proportion_X),(int)(50 + 1*proportion_Y),(int)(200 +1*proportion_X)+widthOfSpaceShip+100, (int)(50 + 1*proportion_Y)+heightOfSpaceShip);
-        spaceShipRectTouch[6] = new Rect((int)(200-100 +2*proportion_X),(int)(50 + 1*proportion_Y),(int)(200 +2*proportion_X)+widthOfSpaceShip+100, (int)(50 + 1*proportion_Y)+heightOfSpaceShip);
-        spaceShipRectTouch[7] = new Rect((int)(200-100 +3*proportion_X),(int)(50 + 1*proportion_Y),(int)(200 +3*proportion_X)+widthOfSpaceShip+100, (int)(50 + 1*proportion_Y)+heightOfSpaceShip);
+        spaceShipRectTouch[4] = new Rect(200 - 100, (int) (50 + 1 * proportion_Y), 200 + widthOfSpaceShip + 100, (int) (50 + 1 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRectTouch[5] = new Rect((int) (200 - 100 + 1 * proportion_X), (int) (50 + 1 * proportion_Y), (int) (200 + 1 * proportion_X) + widthOfSpaceShip + 100, (int) (50 + 1 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRectTouch[6] = new Rect((int) (200 - 100 + 2 * proportion_X), (int) (50 + 1 * proportion_Y), (int) (200 + 2 * proportion_X) + widthOfSpaceShip + 100, (int) (50 + 1 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRectTouch[7] = new Rect((int) (200 - 100 + 3 * proportion_X), (int) (50 + 1 * proportion_Y), (int) (200 + 3 * proportion_X) + widthOfSpaceShip + 100, (int) (50 + 1 * proportion_Y) + heightOfSpaceShip);
         //
-        spaceShipRectTouch[8] = new Rect(200-100,(int)(50 + 2*proportion_Y),200+widthOfSpaceShip+100, (int)(50 + 2*proportion_Y)+heightOfSpaceShip);
-        spaceShipRectTouch[9] = new Rect((int)(200-100 +1*proportion_X),(int)(50 + 2*proportion_Y),(int)(200 +1*proportion_X)+widthOfSpaceShip+100, (int)(50 + 2*proportion_Y)+heightOfSpaceShip);
-        spaceShipRectTouch[10] = new Rect((int)(200-100 +2*proportion_X),(int)(50 + 2*proportion_Y),(int)(200 +2*proportion_X)+widthOfSpaceShip+100, (int)(50 + 2*proportion_Y)+heightOfSpaceShip);
-        spaceShipRectTouch[11] = new Rect((int)(200-100 +3*proportion_X),(int)(50 + 2*proportion_Y),(int)(200 +3*proportion_X)+widthOfSpaceShip+100, (int)(50 + 2*proportion_Y)+heightOfSpaceShip);
+        spaceShipRectTouch[8] = new Rect(200 - 100, (int) (50 + 2 * proportion_Y), 200 + widthOfSpaceShip + 100, (int) (50 + 2 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRectTouch[9] = new Rect((int) (200 - 100 + 1 * proportion_X), (int) (50 + 2 * proportion_Y), (int) (200 + 1 * proportion_X) + widthOfSpaceShip + 100, (int) (50 + 2 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRectTouch[10] = new Rect((int) (200 - 100 + 2 * proportion_X), (int) (50 + 2 * proportion_Y), (int) (200 + 2 * proportion_X) + widthOfSpaceShip + 100, (int) (50 + 2 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRectTouch[11] = new Rect((int) (200 - 100 + 3 * proportion_X), (int) (50 + 2 * proportion_Y), (int) (200 + 3 * proportion_X) + widthOfSpaceShip + 100, (int) (50 + 2 * proportion_Y) + heightOfSpaceShip);
         //
-        spaceShipRectTouch[12] = new Rect(200-100,(int)(50 + 3*proportion_Y),200+widthOfSpaceShip+100, (int)(50 + 3*proportion_Y)+heightOfSpaceShip);
-        spaceShipRectTouch[13] = new Rect((int)(200-100 +1*proportion_X),(int)(50 + 3*proportion_Y),(int)(200 +1*proportion_X)+widthOfSpaceShip+100, (int)(50 + 3*proportion_Y)+heightOfSpaceShip);
-        spaceShipRectTouch[14] = new Rect((int)(200-100 +2*proportion_X),(int)(50 + 3*proportion_Y),(int)(200 +2*proportion_X)+widthOfSpaceShip+100, (int)(50 + 3*proportion_Y)+heightOfSpaceShip);
-        spaceShipRectTouch[15] = new Rect((int)(200-100 +3*proportion_X),(int)(50 + 3*proportion_Y),(int)(200 +3*proportion_X)+widthOfSpaceShip+100, (int)(50 + 3*proportion_Y)+heightOfSpaceShip);
+        spaceShipRectTouch[12] = new Rect(200 - 100, (int) (50 + 3 * proportion_Y), 200 + widthOfSpaceShip + 100, (int) (50 + 3 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRectTouch[13] = new Rect((int) (200 - 100 + 1 * proportion_X), (int) (50 + 3 * proportion_Y), (int) (200 + 1 * proportion_X) + widthOfSpaceShip + 100, (int) (50 + 3 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRectTouch[14] = new Rect((int) (200 - 100 + 2 * proportion_X), (int) (50 + 3 * proportion_Y), (int) (200 + 2 * proportion_X) + widthOfSpaceShip + 100, (int) (50 + 3 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRectTouch[15] = new Rect((int) (200 - 100 + 3 * proportion_X), (int) (50 + 3 * proportion_Y), (int) (200 + 3 * proportion_X) + widthOfSpaceShip + 100, (int) (50 + 3 * proportion_Y) + heightOfSpaceShip);
+        spaceShipRectTouch[16] = new Rect((int) (200 + 3 * proportion_X), (int) (50 + 8 * proportion_Y), (int) (200 + 3 * proportion_X) + widthOfSpaceShip, (int) (50 + 8 * proportion_Y) + heightOfSpaceShip);
     }
 
 
 
 
-
-
-
-
-    public void Save(){
-        switch (shipSeclected){
+    public void Save() {
+        switch (shipSeclected) {
+            case 0:
+                SPACESHIP_STYLE = 1;
+                SHIP_COlOR = 1;
+                break;
             case 1:
                 SPACESHIP_STYLE = 1;
-                SHIP_COlOR =1;
+                SHIP_COlOR = 2;
+                break;
+            case 2:
+                SPACESHIP_STYLE = 1;
+                SHIP_COlOR = 3;
+                break;
+            case 3:
+                SPACESHIP_STYLE = 1;
+                SHIP_COlOR = 4;
+                break;
+            case 4:
+                SPACESHIP_STYLE = 2;
+                SHIP_COlOR = 1;
+                break;
+            case 5:
+                SPACESHIP_STYLE = 2;
+                SHIP_COlOR = 2;
+                break;
+            case 6:
+                SPACESHIP_STYLE = 2;
+                SHIP_COlOR = 3;
+                break;
+            case 7:
+                SPACESHIP_STYLE = 2;
+                SHIP_COlOR = 4;
+                break;
+            case 8:
+                SPACESHIP_STYLE = 3;
+                SHIP_COlOR = 1;
+                break;
+            case 9:
+                SPACESHIP_STYLE = 3;
+                SHIP_COlOR = 2;
+                break;
+            case 10:
+                SPACESHIP_STYLE = 3;
+                SHIP_COlOR = 3;
+                break;
+            case 11:
+                SPACESHIP_STYLE = 3;
+                SHIP_COlOR = 4;
+                break;
+            case 12:
+                SPACESHIP_STYLE = 4;
+                SHIP_COlOR = 1;
+                break;
+            case 13:
+                SPACESHIP_STYLE = 4;
+                SHIP_COlOR = 2;
+                break;
+            case 14:
+                SPACESHIP_STYLE = 4;
+                SHIP_COlOR = 3;
+                break;
+            case 15:
+                SPACESHIP_STYLE = 4;
+                SHIP_COlOR = 4;
+                break;
+            case 16:
+                SPACESHIP_STYLE = 5;
+
+
+
+        }
+        switch (bulletSelected) {
+            case 0:
+                BULLET_STYLE = 1;
+                BULLET_COlOR = 2;
+                break;
+            case 1:
+                BULLET_STYLE = 1;
+                BULLET_COlOR = 3;
+                break;
+            case 2:
+                BULLET_STYLE = 1;
+                BULLET_COlOR = 1;
+                break;
+            case 3:
+                BULLET_STYLE = 1;
+                BULLET_COlOR = 4;
+                break;
+            case 4:
+                BULLET_STYLE = 2;
+                BULLET_COlOR = 2;
+                break;
+            case 5:
+                BULLET_STYLE = 2;
+                BULLET_COlOR = 3;
+                break;
+            case 6:
+                BULLET_STYLE = 2;
+                BULLET_COlOR = 1;
+                break;
+            case 7:
+                BULLET_STYLE = 2;
+                BULLET_COlOR = 4;
+                break;
+            case 8:
+                BULLET_STYLE = 3;
+                BULLET_COlOR = 2;
+                break;
+            case 9:
+                BULLET_STYLE = 3;
+                BULLET_COlOR = 3;
+                break;
+            case 10:
+                BULLET_STYLE = 3;
+                BULLET_COlOR = 1;
+                break;
+            case 11:
+                BULLET_STYLE = 3;
+                BULLET_COlOR = 4;
+                break;
+            case 12:
+                BULLET_STYLE = 4;
+                BULLET_COlOR = 2;
+                break;
+            case 13:
+                BULLET_STYLE = 4;
+                BULLET_COlOR = 3;
+                break;
+            case 14:
+                BULLET_STYLE = 4;
+                BULLET_COlOR = 1;
+                break;
+            case 15:
+                BULLET_STYLE = 4;
+                BULLET_COlOR = 4;
                 break;
         }
+
     }
-    public void Load(){
-        switch (SPACESHIP_STYLE){
+
+    public void Load() {
+        switch (SPACESHIP_STYLE) {
             case 1:
-                switch (SHIP_COlOR){
+                switch (SHIP_COlOR) {
                     case 1:
                         shipSeclected = 0;
                         break;
@@ -284,7 +414,7 @@ public class store extends BaseWindow {
                 }
                 break;
             case 2:
-                switch (SHIP_COlOR){
+                switch (SHIP_COlOR) {
                     case 1:
                         shipSeclected = 4;
                         break;
@@ -300,7 +430,7 @@ public class store extends BaseWindow {
                 }
                 break;
             case 3:
-                switch (SHIP_COlOR){
+                switch (SHIP_COlOR) {
                     case 1:
                         shipSeclected = 8;
                         break;
@@ -316,7 +446,7 @@ public class store extends BaseWindow {
                 }
                 break;
             case 4:
-                switch (SHIP_COlOR){
+                switch (SHIP_COlOR) {
                     case 1:
                         shipSeclected = 12;
                         break;
@@ -331,11 +461,13 @@ public class store extends BaseWindow {
                         break;
                 }
                 break;
+            case 5:
+                shipSeclected = 16;
 
         }
-        switch (BULLET_STYLE){
+        switch (BULLET_STYLE) {
             case 1:
-                switch (BULLET_COlOR){
+                switch (BULLET_COlOR) {
                     case 1:
                         bulletSelected = 0;
                         break;
@@ -351,7 +483,7 @@ public class store extends BaseWindow {
                 }
                 break;
             case 2:
-                switch (BULLET_COlOR){
+                switch (BULLET_COlOR) {
                     case 1:
                         bulletSelected = 4;
                         break;
@@ -367,7 +499,7 @@ public class store extends BaseWindow {
                 }
                 break;
             case 3:
-                switch (BULLET_COlOR){
+                switch (BULLET_COlOR) {
                     case 1:
                         bulletSelected = 8;
                         break;
@@ -383,7 +515,7 @@ public class store extends BaseWindow {
                 }
                 break;
             case 4:
-                switch (BULLET_COlOR){
+                switch (BULLET_COlOR) {
                     case 1:
                         bulletSelected = 12;
                         break;
@@ -412,56 +544,56 @@ public class store extends BaseWindow {
             canvas.save();
             canvas.scale(scalex, scaley, 0, 0);
             canvas.drawBitmap(background, 0, 0, paint);
-//            for (int i = 0; i <bulletsRectTouch.length ; i++) {
-//                canvas.drawRect(bulletsRectTouch[i], paint1);
+//            for (int i = 0; i <bulletsRectTouch.length +1 ; i++) {
+//                canvas.drawRect(spaceShipRectTouch[i], paint1);
 //            }
-            for (int i = 0; i <bulletsRectTouch.length ; i++) {
-                canvas.drawRect(spaceShipRect[i], paint1);
-            }
+//            for (int i = 0; i < bulletsRectTouch.length+1; i++) {
+//                canvas.drawRect(spaceShipRect[i], paint1);
+//            }
 
-                canvas.drawRect(spaceShipRect[shipSeclected], paint);
+            canvas.drawRect(spaceShipRect[shipSeclected], paint);
 
-                canvas.drawRect(bulletsRect[bulletSelected], paint);
+            canvas.drawRect(bulletsRect[bulletSelected], paint);
 
             canvas.drawBitmap(bitmaps[0], 200, 50, paint);
-            canvas.drawBitmap(bitmaps[1], 200 +1*proportion_X, 50 , paint);
-            canvas.drawBitmap(bitmaps[2], 200 +2*proportion_X, 50 , paint);
-            canvas.drawBitmap(bitmaps[3], 200 +3*proportion_X, 50 , paint);
+            canvas.drawBitmap(bitmaps[1], 200 + 1 * proportion_X, 50, paint);
+            canvas.drawBitmap(bitmaps[2], 200 + 2 * proportion_X, 50, paint);
+            canvas.drawBitmap(bitmaps[3], 200 + 3 * proportion_X, 50, paint);
             //
-            canvas.drawBitmap(bitmaps[4], 200, 50 + 1*proportion_Y, paint);
-            canvas.drawBitmap(bitmaps[5], 200 +1*proportion_X, 50 + 1*proportion_Y, paint);
-            canvas.drawBitmap(bitmaps[6], 200 +2*proportion_X, 50 + 1*proportion_Y, paint);
-            canvas.drawBitmap(bitmaps[7], 200 +3*proportion_X, 50 + 1*proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[4], 200, 50 + 1 * proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[5], 200 + 1 * proportion_X, 50 + 1 * proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[6], 200 + 2 * proportion_X, 50 + 1 * proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[7], 200 + 3 * proportion_X, 50 + 1 * proportion_Y, paint);
             //
-            canvas.drawBitmap(bitmaps[8], 200, 50+ 2*proportion_Y, paint);
-            canvas.drawBitmap(bitmaps[9], 200 +1*proportion_X, 50 + 2*proportion_Y, paint);
-            canvas.drawBitmap(bitmaps[10], 200 +2*proportion_X, 50 + 2*proportion_Y, paint);
-            canvas.drawBitmap(bitmaps[11], 200 +3*proportion_X, 50 + 2*proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[8], 200, 50 + 2 * proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[9], 200 + 1 * proportion_X, 50 + 2 * proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[10], 200 + 2 * proportion_X, 50 + 2 * proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[11], 200 + 3 * proportion_X, 50 + 2 * proportion_Y, paint);
             //
-            canvas.drawBitmap(bitmaps[12], 200, 50+ 3*proportion_Y, paint);
-            canvas.drawBitmap(bitmaps[13], 200 +1*proportion_X, 50 + 3*proportion_Y, paint);
-            canvas.drawBitmap(bitmaps[14], 200 +2*proportion_X, 50 + 3*proportion_Y, paint);
-            canvas.drawBitmap(bitmaps[15], 200 +3*proportion_X, 50 + 3*proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[12], 200, 50 + 3 * proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[13], 200 + 1 * proportion_X, 50 + 3 * proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[14], 200 + 2 * proportion_X, 50 + 3 * proportion_Y, paint);
+            canvas.drawBitmap(bitmaps[15], 200 + 3 * proportion_X, 50 + 3 * proportion_Y, paint);
             //
-            canvas.drawBitmap(bullets[0], 200, 50+ 4*proportion_Y, paint);
-            canvas.drawBitmap(bullets[1], 200 +1*proportion_X, 50 + 4*proportion_Y, paint);
-            canvas.drawBitmap(bullets[2], 200 +2*proportion_X, 50 + 4*proportion_Y, paint);
-            canvas.drawBitmap(bullets[12], 200 +3*proportion_X, 50 + 4*proportion_Y, paint);
+            canvas.drawBitmap(bullets[0], 200, 50 + 4 * proportion_Y, paint);
+            canvas.drawBitmap(bullets[1], 200 + 1 * proportion_X, 50 + 4 * proportion_Y, paint);
+            canvas.drawBitmap(bullets[2], 200 + 2 * proportion_X, 50 + 4 * proportion_Y, paint);
+            canvas.drawBitmap(bullets[12], 200 + 3 * proportion_X, 50 + 4 * proportion_Y, paint);
             //
-            canvas.drawBitmap(bullets[3], 200, 50+ 5*proportion_Y, paint);
-            canvas.drawBitmap(bullets[4], 200 +1*proportion_X, 50 + 5*proportion_Y, paint);
-            canvas.drawBitmap(bullets[5], 200 +2*proportion_X, 50 + 5*proportion_Y, paint);
-            canvas.drawBitmap(bullets[13], 200 +3*proportion_X, 50 + 5*proportion_Y, paint);
+            canvas.drawBitmap(bullets[3], 200, 50 + 5 * proportion_Y, paint);
+            canvas.drawBitmap(bullets[4], 200 + 1 * proportion_X, 50 + 5 * proportion_Y, paint);
+            canvas.drawBitmap(bullets[5], 200 + 2 * proportion_X, 50 + 5 * proportion_Y, paint);
+            canvas.drawBitmap(bullets[13], 200 + 3 * proportion_X, 50 + 5 * proportion_Y, paint);
             //
-            canvas.drawBitmap(bullets[6], 200, 50+ 6*proportion_Y, paint);
-            canvas.drawBitmap(bullets[7], 200 +1*proportion_X, 50 + 6*proportion_Y, paint);
-            canvas.drawBitmap(bullets[8], 200 +2*proportion_X, 50 + 6*proportion_Y, paint);
-            canvas.drawBitmap(bullets[14], 200 +3*proportion_X, 50 + 6*proportion_Y, paint);
+            canvas.drawBitmap(bullets[6], 200, 50 + 6 * proportion_Y, paint);
+            canvas.drawBitmap(bullets[7], 200 + 1 * proportion_X, 50 + 6 * proportion_Y, paint);
+            canvas.drawBitmap(bullets[8], 200 + 2 * proportion_X, 50 + 6 * proportion_Y, paint);
+            canvas.drawBitmap(bullets[14], 200 + 3 * proportion_X, 50 + 6 * proportion_Y, paint);
             //
-            canvas.drawBitmap(bullets[9], 200, 50+ 7*proportion_Y, paint);
-            canvas.drawBitmap(bullets[10], 200 +1*proportion_X, 50 + 7*proportion_Y, paint);
-            canvas.drawBitmap(bullets[11], 200 +2*proportion_X, 50 + 7*proportion_Y, paint);
-            canvas.drawBitmap(bullets[15], 200 +3*proportion_X, 50 + 7*proportion_Y, paint);
+            canvas.drawBitmap(bullets[9], 200, 50 + 7 * proportion_Y, paint);
+            canvas.drawBitmap(bullets[10], 200 + 1 * proportion_X, 50 + 7 * proportion_Y, paint);
+            canvas.drawBitmap(bullets[11], 200 + 2 * proportion_X, 50 + 7 * proportion_Y, paint);
+            canvas.drawBitmap(bullets[15], 200 + 3 * proportion_X, 50 + 7 * proportion_Y, paint);
 
             //
 
