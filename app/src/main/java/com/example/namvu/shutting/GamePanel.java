@@ -1091,11 +1091,14 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                         canvas.drawText("I hope someone will be at this stage" , WIDTH / 2 - 275, HEIGHT / 2 -100, paint1);
                         canvas.drawText("Congratulations!!!! you defeat my game!! I hope you enjoy the easter egg" , 200, HEIGHT / 2, paint1);
                         canvas.drawText("Can you please send an email to:vuphuongnam81197@gmail.com with the state picture" , 20, HEIGHT / 2 +100, paint1);
-                        canvas.drawText("It will make my day!!!" , WIDTH / 2 - 175, HEIGHT / 2 +200, paint1);
+                        canvas.drawText("Can you please send an email to:dylanaa114@gmail.com with the state picture" , 100, HEIGHT / 2 +200, paint1);
+                        canvas.drawText("You are sucks. Did you find invisible SpaceShip? !!!!!!!!!!!!By Yang!!!!!!" , 200, HEIGHT / 2 +300, paint1);
+                        canvas.drawText("It will make my day!!!" , WIDTH / 2 - 175, HEIGHT / 2 +400, paint1);
 
                     }
                 }
             }
+
 
         }
     }
@@ -1114,7 +1117,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
             final int savedState = canvas.save();
             canvas.scale(scaleFactorX, scaleFactorY);
             bg.draw(canvas);
-            System.out.println((!rect.contains(spaceShip.x,spaceShip.y))&&spaceShip.rect.centerY() <50);
+            //System.out.println((!rect.contains(spaceShip.x,spaceShip.y))&&spaceShip.rect.centerY() <50);
             spaceShip.draw(canvas);
             for (Enumeration e = dictionaryBullets.keys(); e.hasMoreElements(); ) {
                 dictionaryBullets.get(e.nextElement()).draw(canvas);
