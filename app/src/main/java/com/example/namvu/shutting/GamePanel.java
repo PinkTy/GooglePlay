@@ -73,6 +73,9 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
     private MediaPlayer mMediaPlayer;
     private MediaPlayer backsound;
     public Paint paint4;
+    private MediaPlayer shootSound;
+    private MediaPlayer explosionSound;
+
 
     public GamePanel(Context context, GameSoundPool sounds) {
         super(context, sounds);
@@ -86,6 +89,10 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
         //music
         backsound = MediaPlayer.create(game, R.raw.button);
         backsound.setLooping(false);
+        shootSound = MediaPlayer.create(game, R.raw.shoot);
+        shootSound.setLooping(false);
+        explosionSound = MediaPlayer.create(game, R.raw.shoot);
+        explosionSound.setLooping(false);
         mMediaPlayer = MediaPlayer.create(game, R.raw.testmusic);
         mMediaPlayer.setLooping(true);
         if (!mMediaPlayer.isPlaying()) {
@@ -145,9 +152,9 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
         copyscaleFactorY = getHeight() / (HEIGHT * 1.f);
         copyscaleFactorX = getWidth() / (WIDTH * 1.f);
         paint.setTextSize(40);
-        switch (ConstantUtil.SPACESHIP_STYLE){
+        switch (store.SPACESHIP_STYLE){
             case 1:
-                switch (ConstantUtil.SHIP_COlOR){
+                switch (store.SHIP_COlOR){
                     case 1:
                         spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership1blue), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
                         break;
@@ -163,7 +170,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                 }
                 break;
             case 2:
-                switch (ConstantUtil.SHIP_COlOR){
+                switch (store.SHIP_COlOR){
                     case 1:
                         spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.playership2blue), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
                         break;
@@ -179,7 +186,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                 }
                 break;
             case 3:
-                switch (ConstantUtil.SHIP_COlOR){
+                switch (store.SHIP_COlOR){
                     case 1:
                         spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.spaceship), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
                         break;
@@ -195,7 +202,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                 }
                 break;
             case 4:
-                switch (ConstantUtil.SHIP_COlOR){
+                switch (store.SHIP_COlOR){
                     case 1:
                         spaceShip = new SpaceShip(BitmapFactory.decodeResource(getResources(), R.drawable.ufoblue), BitmapFactory.decodeResource(getResources(), R.drawable.shield));
                         break;
@@ -340,9 +347,10 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
 
         long elapsed = (System.nanoTime() - bulletStartTime) / 1000000;
         if (shoot && elapsed > (timeDelayShoot - spaceShip.timeShutting)) {
-            switch (ConstantUtil.BULLET_STYLE){
+            shootSound.start();
+            switch (store.BULLET_STYLE){
                 case 1:
-                    switch (ConstantUtil.BULLET_COlOR){
+                    switch (store.BULLET_COlOR){
                         case 1:
                             dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue1), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
                             countBullets += 1;
@@ -395,7 +403,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                     }
                     break;
                 case 2:
-                    switch (ConstantUtil.BULLET_COlOR){
+                    switch (store.BULLET_COlOR){
                         case 1:
                             dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue2), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 50, -40, 0));
                             countBullets += 1;
@@ -449,7 +457,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
 
                     break;
                 case 3:
-                    switch (ConstantUtil.BULLET_COlOR) {
+                    switch (store.BULLET_COlOR) {
                         case 1:
                             dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue3), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height + 10, -40, 0));
                             countBullets += 1;
@@ -501,7 +509,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
                     }
 
                 case 4:
-                    switch (ConstantUtil.BULLET_COlOR) {
+                    switch (store.BULLET_COlOR) {
                         case 1:
                             dictionaryBullets.put(countBullets, new Bullet(BitmapFactory.decodeResource(getResources(), R.drawable.laserblue4), spaceShip.rect.centerX() - 9, spaceShip.rect.top - spaceShip.height +50, -40, 0));
                             countBullets += 1;
@@ -568,6 +576,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
             for (int n = 0; n < rocks.size(); n++) {
 
                 if (collision(rocks.get(n), dictionaryBullets.get(object))) {
+                    explosionSound.start();
                     if (!gameOver) {
                         spaceShip.score += rocks.get(n).width;
                     }
@@ -619,6 +628,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
             rocks.get(i).update();
             // check the collision between rocks and the ship it work but a bit lag
             if (collision(rocks.get(i), spaceShip)) {
+                explosionSound.start();
                 spaceShip.health -= rocks.get(i).width / 2;
                 if (spaceShip.health < 0) {
                     explosions.add(new Explosion(explosionImageSonicSmall, spaceShip.x - 60, spaceShip.rect.top - 90));

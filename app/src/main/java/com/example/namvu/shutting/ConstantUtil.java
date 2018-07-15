@@ -9,18 +9,6 @@ public interface ConstantUtil  {
 
 
 
-    int BULLET_STYLE = 1;
-    //1 blue, 2 red, 3 green, 4 MIX
-    int BULLET_COlOR = 2;
-    //100000 at game style 3
-
-
-
-
-    // 1 style 1, 2 style 2,3 style 3,4 style UFO, 5 NamAndYAngSpaceShip
-    int SPACESHIP_STYLE = 4;
-    //1 blue, 2 red, 3 green, 4 Yellow or Orange
-    int SHIP_COlOR = 3;
 
 
 }

@@ -17,7 +17,7 @@ public class GameSoundPool {
     public GameSoundPool(Game game) {
         this.game = game;
         map = new HashMap<Integer, Integer>();
-        soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+        soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
     }
 
     public void initGameSound() {

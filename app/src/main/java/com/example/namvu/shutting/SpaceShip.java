@@ -65,7 +65,7 @@ public class SpaceShip extends GameObject {
         startTime2 = System.nanoTime();
         rect = getRectangle();
         rectFortouch = getRectangleTouch();
-        if (ConstantUtil.SPACESHIP_STYLE == 5){
+        if (store.SPACESHIP_STYLE == 5){
             animation.setFrames(GamePanel.NamAndYAngSpaceShip);
             animation.setDelay(10);
         }
@@ -84,7 +84,7 @@ public class SpaceShip extends GameObject {
 //        Paint fillPaint = new Paint();
 //        fillPaint.setColor(Color.RED);
 //        canvas.drawRect(rect, fillPaint);
-        if (ConstantUtil.SPACESHIP_STYLE == 5){
+        if (store.SPACESHIP_STYLE == 5){
             canvas.drawBitmap(animation.getImage(),x,y,null);
         }
         else {
@@ -116,7 +116,7 @@ public class SpaceShip extends GameObject {
     public void update(){
         long elapsed = (System.nanoTime()-startTime)/1000000;
         long elapsed1 = (System.nanoTime()-startTime2)/1000000;
-        if (ConstantUtil.SPACESHIP_STYLE ==5){
+        if (store.SPACESHIP_STYLE ==5){
         animation.update();}
         if(elapsed>1000)
         {

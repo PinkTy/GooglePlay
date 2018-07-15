@@ -14,7 +14,16 @@ import android.view.SurfaceHolder;
 @SuppressLint("ViewConstructor")
 public class store extends BaseWindow {
     private float back_x;
-    private int widthOfSpaceShip,heightOfSpaceShip, shipSeclected, bulletSelected ;
+    private int widthOfSpaceShip,heightOfSpaceShip,shipSeclected ,bulletSelected ;
+    public static int BULLET_STYLE = 1;
+    //1 blue, 2 red, 3 green, 4 MIX
+    public static int BULLET_COlOR = 1;
+    // 1 style 1, 2 style 2,3 style 3,4 style UFO, 5 NamAndYAngSpaceShip
+    public static int SPACESHIP_STYLE = 2;
+    //1 blue, 2 red, 3 green, 4 Yellow or Orange
+    public static int SHIP_COlOR = 3;
+
+
     private float back_y;
     private Bitmap background;
     private Bitmap back;
@@ -251,13 +260,15 @@ public class store extends BaseWindow {
     public void Save(){
         switch (shipSeclected){
             case 1:
-//                ConstantUtil.SPACESHIP_STYLE = 1;
+                SPACESHIP_STYLE = 1;
+                SHIP_COlOR =1;
+                break;
         }
     }
     public void Load(){
-        switch (ConstantUtil.SPACESHIP_STYLE){
+        switch (SPACESHIP_STYLE){
             case 1:
-                switch (ConstantUtil.SHIP_COlOR){
+                switch (SHIP_COlOR){
                     case 1:
                         shipSeclected = 0;
                         break;
@@ -273,7 +284,7 @@ public class store extends BaseWindow {
                 }
                 break;
             case 2:
-                switch (ConstantUtil.SHIP_COlOR){
+                switch (SHIP_COlOR){
                     case 1:
                         shipSeclected = 4;
                         break;
@@ -289,7 +300,7 @@ public class store extends BaseWindow {
                 }
                 break;
             case 3:
-                switch (ConstantUtil.SHIP_COlOR){
+                switch (SHIP_COlOR){
                     case 1:
                         shipSeclected = 8;
                         break;
@@ -305,7 +316,7 @@ public class store extends BaseWindow {
                 }
                 break;
             case 4:
-                switch (ConstantUtil.SHIP_COlOR){
+                switch (SHIP_COlOR){
                     case 1:
                         shipSeclected = 12;
                         break;
@@ -322,9 +333,9 @@ public class store extends BaseWindow {
                 break;
 
         }
-        switch (ConstantUtil.BULLET_STYLE){
+        switch (BULLET_STYLE){
             case 1:
-                switch (ConstantUtil.BULLET_COlOR){
+                switch (BULLET_COlOR){
                     case 1:
                         bulletSelected = 0;
                         break;
@@ -340,7 +351,7 @@ public class store extends BaseWindow {
                 }
                 break;
             case 2:
-                switch (ConstantUtil.BULLET_COlOR){
+                switch (BULLET_COlOR){
                     case 1:
                         bulletSelected = 4;
                         break;
@@ -356,7 +367,7 @@ public class store extends BaseWindow {
                 }
                 break;
             case 3:
-                switch (ConstantUtil.BULLET_COlOR){
+                switch (BULLET_COlOR){
                     case 1:
                         bulletSelected = 8;
                         break;
@@ -372,7 +383,7 @@ public class store extends BaseWindow {
                 }
                 break;
             case 4:
-                switch (ConstantUtil.BULLET_COlOR){
+                switch (BULLET_COlOR){
                     case 1:
                         bulletSelected = 12;
                         break;
@@ -404,9 +415,9 @@ public class store extends BaseWindow {
 //            for (int i = 0; i <bulletsRectTouch.length ; i++) {
 //                canvas.drawRect(bulletsRectTouch[i], paint1);
 //            }
-//            for (int i = 0; i <bulletsRectTouch.length ; i++) {
-//                canvas.drawRect(spaceShipRectTouch[i], paint1);
-//            }
+            for (int i = 0; i <bulletsRectTouch.length ; i++) {
+                canvas.drawRect(spaceShipRect[i], paint1);
+            }
 
                 canvas.drawRect(spaceShipRect[shipSeclected], paint);
 
