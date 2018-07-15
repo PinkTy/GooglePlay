@@ -18,10 +18,16 @@ public class Game extends Activity {
     private GamePanel mainGame;
     private choosStyle choosePanel;
     private store Store;
+    public static int BULLET_STYLE1, BULLET_COlOR1, SPACESHIP_STYLE1, SHIP_COlOR1;
+
     public static final String SHARED_PREFS = "Game_data1";
     public static final String SCORE_STYLEONE = "Score_1";
     public static final String SCORE_STYLETWO = "Score_2";
     public static final String SCORE_STYLETHREE = "Score_3";
+    public static final String SPACESHIP_STYLE = "SPACESHIP_STYLE";
+    public static final String SHIP_COlOR = "SHIP_COlOR";
+    public static final String BULLET_STYLE = "BULLET_STYLE";
+    public static final String BULLET_COlOR = "BULLET_COlOR";
     public static int scoreGame1, scoreGame2, scoreGame3;
 
     @SuppressLint("HandlerLeak")
@@ -67,8 +73,23 @@ public class Game extends Activity {
             case 3:
                 editor.putInt(SCORE_STYLETHREE,GamePanel.scoregame3);
                 break;
+            case 4:
+                editor.putInt(SPACESHIP_STYLE,store.SPACESHIP_STYLE);
+                editor.putInt(SHIP_COlOR,store.SHIP_COlOR);
+                editor.putInt(BULLET_COlOR,store.BULLET_COlOR);
+                editor.putInt(BULLET_STYLE,store.BULLET_STYLE);
+
+                break;
+
         }
         editor.apply();
+    }
+    public void loadDataShip(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        store.SPACESHIP_STYLE = sharedPreferences.getInt(SPACESHIP_STYLE,1);
+        store.SHIP_COlOR = sharedPreferences.getInt(SHIP_COlOR,1);
+        store.BULLET_COlOR= sharedPreferences.getInt(BULLET_COlOR,1);
+        store.BULLET_STYLE = sharedPreferences.getInt(BULLET_STYLE,1);
     }
     public void loadData(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);

@@ -85,7 +85,7 @@ public class GamePanel extends BaseWindow implements SurfaceHolder.Callback {
         thread = new MainThread(getHolder(), this);
         //make gamePanel focusable so it can handle events
         setFocusable(true);
-
+        game.loadDataShip();
         //music
         backsound = MediaPlayer.create(game, R.raw.button);
         backsound.setLooping(false);
