@@ -116,7 +116,8 @@ public class SpaceShip extends GameObject {
     public void update(){
         long elapsed = (System.nanoTime()-startTime)/1000000;
         long elapsed1 = (System.nanoTime()-startTime2)/1000000;
-        animation.update();
+        if (ConstantUtil.SPACESHIP_STYLE ==5){
+        animation.update();}
         if(elapsed>1000)
         {
             //System.out.print("timechange" + timeChange);
