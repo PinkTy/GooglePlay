@@ -24,6 +24,8 @@ public class menu extends BaseWindow{
     private float frame_y;
     private float frame1_x;
     private float frame1_y;
+    private float gameTitle_x;
+    private float gameTitle_y;
     private boolean isBtChange;
     private boolean isBtChange2;
     private Bitmap newGame;
@@ -33,6 +35,7 @@ public class menu extends BaseWindow{
     private Bitmap store;
     private Bitmap frame;
     private Bitmap frame1;
+    private Bitmap gameTitle;
     private Rect rect;
     private MediaPlayer mMediaPlayer;
 
@@ -120,12 +123,15 @@ public class menu extends BaseWindow{
         line = BitmapFactory.decodeResource(getResources(), R.drawable.line);
         line1 = BitmapFactory.decodeResource(getResources(), R.drawable.line);
         frame = BitmapFactory.decodeResource(getResources(), R.drawable.blueframe);
-        frame1 =BitmapFactory.decodeResource(getResources(), R.drawable.blueframe);
+        frame1 = BitmapFactory.decodeResource(getResources(), R.drawable.blueframe);
+        gameTitle = BitmapFactory.decodeResource(getResources(), R.drawable.gametitle);
+
         scalex = screen_width / background.getWidth();
         scaley = screen_height / background.getHeight();
-
         button_x = screen_width / 2 - newGame.getWidth() / 2;
         button_y = screen_height / 2 + newGame.getHeight();
+        gameTitle_x = screen_width / 2 - gameTitle.getWidth() / 2;
+        gameTitle_y = screen_height / 2  - gameTitle.getHeight();
         frame_x = button_x - 35;
         frame_y = button_y - 10;
         line_x = button_x + 7;
@@ -146,6 +152,7 @@ public class menu extends BaseWindow{
             canvas.scale(scalex, scaley, 0, 0);
             canvas.drawBitmap(background, 0, 0, paint);
             canvas.restore();
+            canvas.drawBitmap(gameTitle, gameTitle_x, gameTitle_y, paint);
             if(isBtChange){
                 canvas.drawBitmap(frame, frame_x, frame_y, paint);
                 canvas.drawBitmap(newGame, button_x, button_y, paint);
